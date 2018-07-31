@@ -13,7 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-
+    "downlevelIteration": true,
     "suppressImplicitAnyIndexErrors": true
   },
   "exclude": [
