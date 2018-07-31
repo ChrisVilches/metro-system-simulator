@@ -38,6 +38,10 @@ export default class Line{
     return accum[index2] - accum[index1];
   }
 
+  public get fullLength(){
+    return this.getDistance(0, this.stations.length-1);
+  }
+
 }
 
 

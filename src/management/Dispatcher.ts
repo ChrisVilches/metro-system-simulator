@@ -66,6 +66,14 @@ export default class Dispatcher implements IUpdatable{
 
   }
 
+  public get trains(): Train[]{
+    let trains: Train[] = [];
+    for(let i in this.lineSegmentDayPlanification){
+      trains = trains.concat(this.lineSegmentDayPlanification[i].currentTrains);
+    }
+    return trains;
+  }
+
   public update(){
 
     // NOTESE que esto es solo para un terminal
