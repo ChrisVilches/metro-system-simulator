@@ -8,7 +8,7 @@
   { "lat": -33.44407722048203, "lng": -70.72346388600789, "station": "San Pablo" },
   { "lat": -33.45142478057161, "lng": -70.72260761939748, "station": "Neptuno" },
   { "lat": -33.45607950918132, "lng": -70.72080517493947 },
-  { "lat": -33.4577981150467, "lng": -70.71591282569631, "station": "Pajaritos", "isTerminal": false},
+  { "lat": -33.4577981150467, "lng": -70.71591282569631, "station": "Pajaritos", "isTerminal": true },
   { "lat": -33.457368466773914, "lng": -70.7060422965215, "station": "Las Rejas" },
   { "lat": -33.456222727637844, "lng": -70.70037747108205, "station": "Ecuador" },
   { "lat": -33.45421764772004, "lng": -70.6924810477422, "station": "San Alberto Hurtado" },

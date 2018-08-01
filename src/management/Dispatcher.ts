@@ -27,10 +27,10 @@ export default class Dispatcher implements IUpdatable{
   private direction: number;
   private periods: TimeRange[] = [];
 
-  constructor(direction:number, line:any, schedules:Time[]){
+  constructor(direction:number, line:Line, schedules:Time[]){
     this.line = line;
     this.direction = direction;
-    this.dangerDistance = 500;
+    this.dangerDistance = 200;
 
     for(let s=0; s<schedules.length-1; s++){
       this.periods.push({
@@ -121,9 +121,13 @@ export default class Dispatcher implements IUpdatable{
 
   }
 
-  private checkDanger(maximumDistanceAllowed: number, extraTrain:Train = null){
+  private checkDanger(maximumDistanceAllowed: number, extraTrain: Train = null){
 
     let allTrains: Train[] = [];
+
+    this.lineSegmentDayPlanification.map(seg => {
+      allTrains = allTrains.concat(seg.currentTrains);
+    });
 
     if(extraTrain !== null){
       allTrains.push(extraTrain);

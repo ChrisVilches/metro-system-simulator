@@ -8,9 +8,9 @@ enum State {
   ENTERING_TERMINAL
 }
 
-const MAX_SPEED_DEFAULT: number = 200;
-const ACCELERATION_DEFAULT: number = 1000;
-const MAX_WAIT_TIME: number = 1;
+const MAX_SPEED_DEFAULT: number = 20;
+const ACCELERATION_DEFAULT: number = 3;
+const MAX_WAIT_TIME: number = 8;
 const WAIT_ENTER_TERMINAL: number = 5;
 
 export default class Train implements IUpdatable{
