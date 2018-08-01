@@ -11,6 +11,7 @@ it('Gets point inside line correctly (one segment)', () => {
   expect(line.getPointWithinRoute(0.5)).toEqual({ lat: 5, lng: 0 });
   expect(line.getPointWithinRoute(0.9999)).toEqual({ lat: 9.999, lng: 0 });
   expect(line.getPointWithinRoute(1)).toEqual({ lat: 10, lng: 0 });
+  expect(line.getPointWithinRoute(1.2)).toEqual({ lat: 10, lng: 0 });
 
 });
 

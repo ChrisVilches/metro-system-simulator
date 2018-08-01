@@ -1,0 +1,9 @@
+[
+  { "lat": -33.439342172561, "lng": -70.64122439287235, "station": "Monte Tabor", "isTerminal": true },
+  { "lat": -33.45461991663554, "lng": -70.63324384293304 },
+  { "lat": -33.46369061114442, "lng": -70.61513186357547, "station": "Las Parcelas" },
+  { "lat": -33.45653001531851, "lng": -70.56432009599735, "station": "Las Parcelas" },
+  { "lat": -33.411834540929405, "lng": -70.54818392656375, "station": "Las Parcelas" },
+  { "lat": -33.40638928898418, "lng": -70.64534426591922, "station": "Las Parcelas" },
+  { "lat": -33.435331185862005, "lng": -70.7208752717786, "station": "Las Parcelas", "isTerminal": true }
+]

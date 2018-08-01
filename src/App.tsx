@@ -13,36 +13,21 @@ import TimeRange from "./management/TimeRange";
 import { Util } from "./Util";
 import PolyLine from "./PolyLine";
 import LineInfo from "./LineInfo";
+import LineFactory from "./LineFactory";
 
+const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
-let demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
-
-let demand2:IDemand = new DemandQuarters(require("./sampledata/demand2.json"));
+const demand2:IDemand = new DemandQuarters(require("./sampledata/demand2.json"));
 
 
 const points = require("./sampledata/linea1_santiago.json");
+points.map(p => { if(p.station) p.demands = [demand1, demand2] });
+points.map(p => { if(p.isTerminal) p.timeRange = new TimeRange(new Time(8, 0), new Time(23, 0)) });
 
 const polyLine = new PolyLine(points, "#FF0000");
 
-let stations = [];
-let distanceFromPrev = [];
-
-for(let i=0; i<points.length; i++){
-
-  if(!points[i].hasOwnProperty("station")) continue;
-
-  if(points[i].isTerminal){
-    stations.push(new Station([demand2, demand2], new TimeRange(new Time(6, 0), new Time(11, 30))));
-  } else {
-    stations.push(new Station([demand2, demand2]));
-  }
-
-  if(i === 0) continue;
-  let dist = Math.floor(10000 * Util.getDistance(points[i], points[i-1]));
-  distanceFromPrev.push(dist);
-}
-
-let lineFromLineClass = new Line(stations, distanceFromPrev);
+const lineFactory = new LineFactory();
+const lineFromLineClass = lineFactory.fromPhysicalPoints(points);
 
 
 class App extends React.Component {
@@ -147,13 +132,6 @@ class App extends React.Component {
         ctx.lineTo(a1, b1);
 
       }
-
-      /*for(let i=0; i<allTrains.pos; i++){
-
-      }*/
-
-
-
 
 
       d.update();

@@ -22,35 +22,40 @@ export default class PolyLine{
     return this._color;
   }
 
-  public getPointWithinRoute(percent: number){
-    if(percent > 1) percent = 1;
-    if(percent < 0) percent = 0;
+  public getPointWithinRoute(_percent: number){
+    if(_percent > 1) _percent = 1;
+    if(_percent < 0) _percent = 0;
 
+    if(_percent === 0) return this.points[0];
+    if(_percent === 1) return _.last(this.points); 
+
+    let percent: Big = new Big(_percent);
     let percentDifference = percent;
+
     for(let i=0; i<this.points.length-1; i++){
 
       let a = this.points[i];
       let b = this.points[i+1];
-      let distance = Util.getDistance(
+      let distance = new Big(Util.getDistance(
         {lat: a.lat, lng: a.lng},
         {lat: b.lat, lng: b.lng}
-      );
-      let percent = distance/this.fullDistance;
-      if(percentDifference <= percent){
-        let segmentPercent = percentDifference/percent;
-        let dirLat = b.lat - a.lat;
-        let dirLng = b.lng - a.lng;
+      ));
+      let p = distance.div(this.fullDistance);
+      if(p.gt(percentDifference) || p.eq(percentDifference)){
+        let segmentPercent = percentDifference.div(p);
+        let dirLat = (new Big(b.lat)).minus(a.lat);
+        let dirLng = (new Big(b.lng)).minus(a.lng);
 
         return {
-          lat: a.lat + (dirLat * segmentPercent),
-          lng: a.lng + (dirLng * segmentPercent)
+          lat: +(new Big(a.lat)).plus((dirLat.times(segmentPercent))),
+          lng: +(new Big(a.lng)).plus((dirLng.times(segmentPercent)))
         };
       }
 
-      percentDifference -= percent;
+      percentDifference = percentDifference.minus(p);
     }
 
-    throw Error("Not found within route");
+    throw Error("Not found within route, value: " + percent);
   }
 
   private lineFullDistance(){
