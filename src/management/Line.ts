@@ -1,9 +1,14 @@
 import Station from "./Station";
-import LineSegment from "./LineSegment";
 import Train from "./Train";
 import * as _ from "lodash";
 
-export default class Line{
+export interface LineSegment{
+  firstTerminal: number;
+  secondTerminal: number;
+}
+
+
+export class Line{
 
   private _stations: Station[];
   private _accumDistances: number[];

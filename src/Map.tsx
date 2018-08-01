@@ -21,21 +21,11 @@ class MyMap extends React.Component{
     return (
       <GoogleMap onClick={this.onClick} {...this.props}>
 
-        {this.props.lines.map((line, i) => (
-          line.points.filter(x => x.hasOwnProperty("station")).map((point, j) => (
-            <Marker key={j} position={point} title={point.station}/>
-          ))
-        ))}
+        {this.props.children}
 
         {this.props.trains.map((train, i) => (
           <Circle key={i} radius={70} options={{ fillColor: "#006600", center: train.pos }}/>
         ))}
-
-        {this.props.lines.map((line, i) => (
-          <Polyline key={i} options={{ strokeColor: line.color, path: line.points }}/>
-        ))}
-
-
 
       </GoogleMap>
     );

@@ -1,11 +1,21 @@
-import Line from "./management/Line";
+import { Line } from "./management/Line";
 import Station from "./management/Station";
 import * as _ from "lodash";
 import { Util } from "./Util";
+import TimeRange from "./management/TimeRange";
 
-export default class LineFactory{
+export interface LineFactoryPhysicalPoint{
+  isTerminal?: boolean;
+  lat: number;
+  lng: number;
+  station?: string;
+  demands?: any[];
+  timeRange?: TimeRange;
+}
 
-  public fromPhysicalPoints(points: any[]): Line{
+export class LineFactory{
+
+  public fromPhysicalPoints(points: LineFactoryPhysicalPoint[], scaleFactor: number = 10000): Line{
 
     if(!_.first(points).isTerminal) throw Error("First station must be a terminal");
     if(!_.last(points).isTerminal) throw Error("Last station must be a terminal");
@@ -38,7 +48,7 @@ export default class LineFactory{
       }
 
       if(i > 0){
-        distanceFromPrev.push(Math.floor(10000 * accum));
+        distanceFromPrev.push(Math.floor(scaleFactor * accum));
         accum = 0;
       }
     }

@@ -5,21 +5,15 @@ import Big from 'big.js';
 export default class PolyLine{
 
   private _points: any[];
-  private _color: string = "#000000";
   private fullDistance: number;
 
   constructor(points: any[], color?: string){
     this._points = points.map(x => _.pick(x, ["lat", "lng"]));
     this.fullDistance = this.lineFullDistance();
-    this._color = color;
   }
 
   public get points(){
     return this._points;
-  }
-
-  public get color(){
-    return this._color;
   }
 
   public getPointWithinRoute(_percent: number){
@@ -27,7 +21,7 @@ export default class PolyLine{
     if(_percent < 0) _percent = 0;
 
     if(_percent === 0) return this.points[0];
-    if(_percent === 1) return _.last(this.points); 
+    if(_percent === 1) return _.last(this.points);
 
     let percent: Big = new Big(_percent);
     let percentDifference = percent;

@@ -1,11 +1,10 @@
-import Line from "./Line";
+import { Line, LineSegment } from "./Line";
 import Train from "./Train";
 import IUpdatable from "./IUpdatable";
 import * as _ from "lodash";
 import Station from "./Station";
 import TimeRange from "./TimeRange";
 import Time from "./Time";
-import LineSegment from "./LineSegment";
 
 // Train dispatcher
 

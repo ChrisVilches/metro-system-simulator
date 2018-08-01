@@ -1,9 +1,8 @@
-import Line from '../Line';
+import { Line, LineSegment } from '../Line';
 import Station from '../Station';
 import DemandQuarters from '../DemandQuarters';
 import TimeRange from '../TimeRange';
 import Time from '../Time';
-import LineSegment from '../LineSegment';
 import Train from '../Train';
 
 const demand1 = new DemandQuarters([
