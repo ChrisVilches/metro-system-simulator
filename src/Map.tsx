@@ -22,7 +22,7 @@ class MyMap extends React.Component{
       <GoogleMap onClick={this.onClick} {...this.props}>
 
         {this.props.trains.map((train, i) => (
-          <Circle key={i} radius={70} options={{ fillColor: "#006600", center: train.pos }}/>
+          <Circle key={i} radius={70} options={{ fillColor: "#888888", center: train.pos }}/>
         ))}
 
         {this.props.children}
