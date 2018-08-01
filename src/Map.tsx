@@ -22,7 +22,7 @@ class MyMap extends React.Component{
       <GoogleMap onClick={this.onClick} {...this.props}>
 
         {this.props.lines.map((line, i) => (
-          line.path.filter(x => x.hasOwnProperty("station")).map((point, j) => (
+          line.points.filter(x => 1==1||x.hasOwnProperty("station")).map((point, j) => (
             <Marker key={j} position={point} title={point.station}/>
           ))
         ))}
@@ -32,8 +32,10 @@ class MyMap extends React.Component{
         ))}
 
         {this.props.lines.map((line, i) => (
-          <Polyline key={i} options={{ strokeColor: line.color, path: line.path }}/>
+          <Polyline key={i} options={{ strokeColor: line.color, path: line.points }}/>
         ))}
+
+
 
       </GoogleMap>
     );

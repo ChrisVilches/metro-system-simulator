@@ -1,6 +1,6 @@
-import HourMinute from "./HourMinute";
+import Time from "./Time";
 
 export default interface IDemand {
-  getDemand(time: HourMinute):number;
-  getAverage(a: HourMinute, b: HourMinute):number;
+  getDemand(time: Time):number;
+  getAverage(a: Time, b: Time):number;
 }

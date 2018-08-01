@@ -1,22 +1,16 @@
 import * as _ from "lodash";
 import IDemand from "./IDemand";
-import HourMinute from "./HourMinute";
+import Time from "./Time";
 
 export default class DemandQuarters implements IDemand{
 
   private _quarters: any;
 
-  constructor(times:any = null){
-
-    if(times === null){
-      throw Error("Argument cannot be null");
-    }
-
+  constructor(times:any[]){
     this._quarters = _.cloneDeep(times);
-
   }
 
-  public getDemand(time: HourMinute){
+  public getDemand(time: Time){
 
     let hr = time.hr;
     let min = time.min;
@@ -33,7 +27,7 @@ export default class DemandQuarters implements IDemand{
     return 0;
   }
 
-  public getAverage(a: HourMinute, b: HourMinute){
+  public getAverage(a: Time, b: Time){
 
     let quarter1 = Math.floor(a.min/15);
     let quarter2 = Math.floor(b.min/15);
@@ -41,50 +35,20 @@ export default class DemandQuarters implements IDemand{
     let accum = 0;
     let n = 0;
 
-    for(let h=a.hr; h<b.hr; h++){
+    for(let h=a.hr; h<=b.hr; h++){
 
       let firstQuarter = h === a.hr? quarter1 : 0;
-      let lastQuarter = h === b.hr? quarter2 : 4;
+      let lastQuarter = h === b.hr? quarter2 : 3;
 
-      for(let q=firstQuarter; q<lastQuarter; q++){
+      for(let q=firstQuarter; q<=lastQuarter; q++){
         n++;
-        accum += this.getDemand({ hr: h, min: q });
+        accum += this.getDemand(new Time(h, q * 15));
       }
     }
+
 
     let average = accum/n;
     return average;
   }
 
 }
-
-
-
-
-/*
-* TEST
-*
-*/
-/*
-let demand = new Demand([
-  { hr: 8, quarters: [10, 40, 70, 80]  },
-  { hr: 9, quarters: [80, 85, 79, 80]  },
-  { hr: 10, quarters: [80, 70, 60, 50]  },
-  { hr: 11, quarters: [40, 30, 35, 32]  },
-  { hr: 12, quarters: [30, 35, 32, 34]  },
-  { hr: 13, quarters: [30, 45, 35, 34]  },
-  { hr: 14, quarters: [30, 35, 33, 34]  },
-  { hr: 15, quarters: [30, 35, 32, 34]  },
-  { hr: 16, quarters: [30, 35, 32, 34]  },
-  { hr: 17, quarters: [30, 35, 32, 34]  },
-  { hr: 18, quarters: [80, 85, 79, 80]  },
-  { hr: 19, quarters: [82, 87, 79, 72]  },
-  { hr: 20, quarters: [80, 85, 79, 80]  },
-  { hr: 21, quarters: [10, 40, 70, 80]  },
-  { hr: 22, quarters: [10, 5, 8, 13]  }
-]);
-
-
-console.assert(demand.getDemand(8, 30) === 70);
-console.assert(demand.getDemand(8, 29) === 40);
-*/

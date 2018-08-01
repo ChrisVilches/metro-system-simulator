@@ -8,6 +8,11 @@ enum State {
   ENTERING_TERMINAL
 }
 
+const MAX_SPEED_DEFAULT: number = 15;
+const ACCELERATION_DEFAULT: number = 5;
+const MAX_WAIT_TIME: number = 2;
+const WAIT_ENTER_TERMINAL: number = 5;
+
 export default class Train implements IUpdatable{
 
   private _currentPos:number;
@@ -22,14 +27,14 @@ export default class Train implements IUpdatable{
   private state:State;
   private _doneFlag:boolean = false;
 
-  constructor(stopPoints:any[], initStation: number){
+  constructor(stopPoints:any[], initPoint: number, options: any = {}){
 
 
     // The train only moves.
     // It may receive signals to reduce speed or stop if there was an accident,
     // but in general it only wants to get to the target stations.
 
-    this._currentPos = stopPoints[initStation]; // Distance across the line
+    this._currentPos = stopPoints[initPoint]; // Distance across the line
 
     // Stop points
     // All stations where this train stops
@@ -40,15 +45,15 @@ export default class Train implements IUpdatable{
     // continue the trip)
     // The stop points can't be changed after it begins.
     this.stopPoints = _.cloneDeep(stopPoints);
-    this.nextStopPoint = initStation+1;
+    this.nextStopPoint = initPoint+1;
 
     this.speed = 0;
-    this.maxSpeed = 180; // m/s
 
-    this.acceleration = 10; // m/s^2
 
-    this.maxWaitTime = 10; // fixed, although it could have some randomizing and depending on how big the station is it could take a bit more
-    this.waitEnterTerminal = 5;
+    this.maxSpeed = typeof options.maxSpeed !== "undefined"? options.maxSpeed : MAX_SPEED_DEFAULT;
+    this.acceleration = typeof options.acceleration !== "undefined"? options.acceleration : ACCELERATION_DEFAULT;
+    this.maxWaitTime = typeof options.maxWaitTime !== "undefined"? options.maxWaitTime : MAX_WAIT_TIME; // fixed, although it could have some randomizing and depending on how big the station is it could take a bit more
+    this.waitEnterTerminal = typeof options.waitEnterTerminal !== "undefined"? options.waitEnterTerminal : WAIT_ENTER_TERMINAL;
 
     this.state = State.ACCELERATING;
 
@@ -69,11 +74,12 @@ export default class Train implements IUpdatable{
   }
 
   private stateAccelerating(){
-    console.log("(currPos "+this._currentPos+", speed "+this.speed+") Update train, increase speed " + (new Date()).toLocaleString())
+    console.log("(currPos "+this._currentPos+", stoppoints "+this.stopPoints+")")
 
+    let nextSpeed = this.speed + this.acceleration;
 
-    let rangeA = this._currentPos - this.speed;
-    let rangeB = this._currentPos;
+    let rangeA = this._currentPos;
+    let rangeB = this._currentPos + nextSpeed;
 
     let between = rangeA <= this.stopPoints[this.nextStopPoint] && this.stopPoints[this.nextStopPoint] <= rangeB;
     let same = this._currentPos === this.stopPoints[this.nextStopPoint];
@@ -93,8 +99,7 @@ export default class Train implements IUpdatable{
       }
 
     } else {
-      this.speed += this.acceleration;
-      this.speed = Math.min(this.speed, this.maxSpeed);
+      this.speed = Math.min(nextSpeed, this.maxSpeed);
       this._currentPos += this.speed;
     }
 
@@ -102,6 +107,7 @@ export default class Train implements IUpdatable{
   }
 
   private stateEnteringTerminal(){
+    this.speed = 0;
     this.currentWaitTimeStation--;
 
     if(this.currentWaitTimeStation === 0){
@@ -118,7 +124,8 @@ export default class Train implements IUpdatable{
 
   private stateStoppedAtStation(){
     this.currentWaitTimeStation--;
-
+    this.speed = 0;
+    console.log("STopped, current pos: " + this._currentPos)
     if(this.currentWaitTimeStation === 0){
       console.log(`train STARTS after being stopped`);
       this.state = State.ACCELERATING;

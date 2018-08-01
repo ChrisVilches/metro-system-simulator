@@ -1,4 +1,5 @@
 import IDemand from "./IDemand";
+import TimeRange from "./TimeRange";
 
 export default class Station{
 
@@ -7,17 +8,15 @@ export default class Station{
   private _demand: IDemand[];
   private _isTerminal: boolean;
 
-  constructor(props:any){
+  constructor(demands: IDemand[], firstLastTimes: TimeRange = { firstTime: null, secondTime: null }){
 
-    props = props? props : {};
-
-    this._lastTrainTime = props.lastTrainTime || null;
-    this._firstTrainTime = props.firstTrainTime || null;
+    this._lastTrainTime = firstLastTimes.firstTime;
+    this._firstTrainTime = firstLastTimes.secondTime;
 
     // Two directions
     this._demand = [null, null];
-    this._demand[0] = props.demand[0] || null;
-    this._demand[1] = props.demand[1] || null;
+    this._demand[0] = demands[0] || null;
+    this._demand[1] = demands[1] || null;
 
     if(this._demand[0] === null || this._demand[1] === null){
       throw Error("It must have a demand attribute for both directions.");
