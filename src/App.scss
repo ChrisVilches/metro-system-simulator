@@ -14,15 +14,21 @@
   background-position: right;
 }
 
-.footer-content{
-  margin: 0 auto;
+.footer {
+  /*position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;*/
   text-align: center;
-
+  margin: 0 auto;
 }
 
+
+
 .App-title {
-  font-size: 1.5em;
+  font-size: 2.2em;
   margin-top: 100px;
+  font-family: SourceSansPro-Regular;
 }
 
 .App-intro {

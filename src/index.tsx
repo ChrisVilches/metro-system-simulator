@@ -4,7 +4,7 @@ import App from './App';
 import './normalize.css';
 import './skeleton.css';
 import "font-awesome/css/font-awesome.min.css";
-import './index.css';
+import './index.scss';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(

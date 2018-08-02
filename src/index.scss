@@ -1,0 +1,116 @@
+$small-icon-scale: 0.6;
+
+/*
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}*/
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: sans-serif;
+  position: relative;
+  background-image: url(tokyo.png);
+  background-position: bottom;
+  background-attachment: fixed;
+  background-repeat: repeat-x;
+}
+
+
+
+@font-face {
+  font-family: blackfont;
+  src: url('fonts/black.ttf');
+}
+
+@font-face {
+  font-family: SourceSansPro-Regular;
+  src: url('fonts/SourceSansPro-Regular.ttf');
+}
+
+
+
+.icon-section{
+  padding-right: 10px;
+  margin-bottom: 2px;
+  color: #FFFC34;
+}
+
+.fa-sm{
+    -webkit-transform: scale($small-icon-scale,$small-icon-scale);
+    -ms-transform: scale($small-icon-scale,$small-icon-scale);
+    transform: scale($small-icon-scale,$small-icon-scale);
+    vertical-align: middle;
+}
+
+.btn-primary {
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 10px;
+  background-color: white;
+  border: 2px solid #5a5a5a;
+  color: #5a5a5a;
+  margin-bottom: 10px;
+  font-size: 0.7em;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #fafafa;
+}
+
+a{
+  cursor: pointer;
+}
+
+hr{
+  border: 0;
+  height: 1px;
+  margin: 15px 0;
+  background-image: linear-gradient(to right, rgba(180, 180, 180, 0), rgba(180, 180, 180, 0.75), rgba(180, 180, 180, 0));
+}
+
+.info-box {
+  padding: 10px;
+  background-color: #fff8c6;
+  font-size: 0.7em;
+  margin-bottom: 10px;
+  position: relative;
+  padding-top: 40px;
+}
+
+.info-box:before{
+  position: absolute;
+  font-family: 'FontAwesome';
+  top: 0;
+  left: 10px;
+  font-size: 2.5em;
+  color: #F0D187;
+  content: "\f05a";
+}
+
+.margin-bottom{
+  margin-bottom: 10px;
+}
+
+
+.stylish-link{
+  color: black;
+  font-weight: bold;
+}
+
+.stylish-link:hover{
+  color: #88AACE;
+}
+
+.fa{
+  font-size: 2em;
+}

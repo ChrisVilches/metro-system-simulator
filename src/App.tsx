@@ -128,11 +128,11 @@ class App extends React.Component {
           <div className="row">
 
             <div className="three columns">
-              <SectionComponent title="Monitor">
+              <SectionComponent title={<span><i className="fa fa-sm fa-area-chart icon-section"/>Monitor</span>}>
                 <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
               </SectionComponent>
 
-              <SectionComponent title="About">
+              <SectionComponent title={<span><i className="fa fa-sm fa-info icon-section"/>About</span>}>
                 <p>
                   This is a train system simulator. It was created
                   mainly with the purpose of developing and testing different AI and scheduling algorithms.
@@ -160,7 +160,7 @@ class App extends React.Component {
 
             <div className="three columns">
 
-              <SectionComponent title="Select line">
+              <SectionComponent title={<span><i className="fa fa-sm fa-train icon-section"/>Select line</span>}>
                 <select>
                   <option value="a">a</option>
                   <option value="b">b</option>
@@ -174,23 +174,21 @@ class App extends React.Component {
 
           </div>
 
-          <hr/>
-
-          <footer>
-            <div className="footer-content">
-              <p>By Felo Vilches, 2018</p>
-              <p>
-                <a className="stylish-link" href="https://github.com/FeloVilches/i-like-trains" target="_blank">
-                  <i className="fa fa-github"/>
-                </a>
-              </p>
-            </div>
-          </footer>
-
-
-
         </div>
 
+
+        <div className="footer">
+
+          <hr/>
+          <div className="footer-content">
+            <p>By Felo Vilches, 2018</p>
+            <p>
+              <a className="stylish-link" href="https://github.com/FeloVilches/i-like-trains" target="_blank">
+                <i className="fa fa-github"/>
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
