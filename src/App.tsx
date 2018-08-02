@@ -141,7 +141,7 @@ class App extends React.Component {
                 </p>
               </SectionComponent>
             </Col>
-            <Col md={6}>
+            <Col md={6} className="mb-2">
               <Map
                 trains={this.state.trains}
                 isMarkerShown={true}
