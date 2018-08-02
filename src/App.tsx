@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './App.css';
-import logo from './logo.svg';
 import Dispatcher from "./management/Dispatcher";
 import DemandConfig from "./DemandConfig";
 import { Line } from "./management/Line";
@@ -14,10 +13,12 @@ import { Util } from "./Util";
 import PolyLine from "./PolyLine";
 import { Train } from "./management/Train";
 import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
-import { LineMapDisplay, LineMapDisplayProps } from "./LineMapDisplay";
-import Monitor from "./management/Monitor";
-import { MonitorComponent, MonitorComponentProps } from "./MonitorComponent";
+import { LineMapDisplay } from "./LineMapDisplay";
+import { Monitor } from "./management/Monitor";
+import { MonitorComponent } from "./MonitorComponent";
 import { TimeLine, TimeLineProps } from "./TimeLine";
+import { SectionComponent } from "./SectionComponent";
+import "font-awesome/css/font-awesome.min.css";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -114,33 +115,81 @@ class App extends React.Component {
 
   public render() {
     return (
-      <div className="App">
+      <div>
+
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Metro System Simulator</h1>
         </header>
-        <div className="App-intro">
-          <Map
-            trains={this.state.trains}
-            isMarkerShown={true}
-            defaultClickableIcons={false}
-            onGetClickCoordinates={this.getCoordinates}
-            defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
-            defaultZoom={12.22}>
 
-            <LineMapDisplay color={color} stationLocations={stationLocations} polyLine={polyLine}/>
+        <div className="container">
 
-          </Map>
+
+
+          <div className="row">
+
+            <div className="three columns">
+              <SectionComponent title="Monitor">
+                <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
+              </SectionComponent>
+
+              <SectionComponent title="About">
+                <p>
+                  This is a train system simulator. It was created
+                  mainly with the purpose of developing and testing different AI and scheduling algorithms.
+                </p>
+              </SectionComponent>
+
+            </div>
+
+            <div className="six columns">
+
+              <Map
+                trains={this.state.trains}
+                isMarkerShown={true}
+                defaultClickableIcons={false}
+                onGetClickCoordinates={this.getCoordinates}
+                defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
+                defaultZoom={12.22}>
+
+                <LineMapDisplay color={color} stationLocations={stationLocations} polyLine={polyLine}/>
+
+              </Map>
+
+            </div>
+
+
+            <div className="three columns">
+
+              <SectionComponent title="Select line">
+                <select>
+                  <option value="a">a</option>
+                  <option value="b">b</option>
+                  <option value="c">c</option>
+                </select>
+              </SectionComponent>
+
+              <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
+
+            </div>
+
+          </div>
+
+          <hr/>
+
+          <footer>
+            <div className="footer-content">
+              <p>By Felo Vilches, 2018</p>
+              <p>
+                <a className="stylish-link" href="https://github.com/FeloVilches/i-like-trains" target="_blank">
+                  <i className="fa fa-github"/>
+                </a>
+              </p>
+            </div>
+          </footer>
+
+
+
         </div>
-
-        <div>Iteration: {this.state.iteration}</div>
-
-        <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
-
-        <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
-
-        <DemandConfig/>
-
 
       </div>
     );

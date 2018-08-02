@@ -26,6 +26,7 @@ const lineChartOptions = {
   scaleSteps: 4,
   scaleStepWidth: 25,
   scaleStartValue: 0,
+  scaleShowLabels: false,
 };
 
 class StationInfoComponent extends React.Component{
@@ -49,7 +50,7 @@ class StationInfoComponent extends React.Component{
     }
 
     this.state.chartData = {
-    	labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+    	labels: [0, "", "", "", 4, "", "", "", 8, "", "", "", 12, "", "", "", 16, "", "", "", 20, "", "", ""],
       datasets: [
     		{
     			fillColor: "rgba(220,220,220,0.2)",
@@ -85,36 +86,29 @@ class StationInfoComponent extends React.Component{
   render(){
     return (
       <li>
-        <div className="content">
-          {!this.props.isLast? (
-            <div>
-              <div className="timeline-line" style={{ borderColor: this.props.color }}/>
-            </div>
-          ) : ""}
+        {!this.props.isLast? (
+          <div>
+            <div className="timeline-line" style={{ borderColor: this.props.color }}/>
+          </div>
+        ) : ""}
 
-          <a onClick={this.onClickToggleInfo}>
-            <div className="timeline-circle" style={{ backgroundColor: this.props.color }}/>
-            <h4>{this.props.name}</h4>
+        <a className="stylish-link" onClick={this.onClickToggleInfo}>
+          <div className="timeline-circle" style={{ backgroundColor: this.props.color }}/>
+          {this.props.name}
         </a>
 
-          {this.state.showInfo? (
-            <div>
-              <p>New train in approximately {this.props.estimate} seconds.</p>
-
-              <div>
-                <button className="btn-primary">
-                  Useless button
-                </button>
-              </div>
-              {this.state.showDemand? (
-                <Line data={this.state.chartData} options={lineChartOptions} width="600" height="180"/>
-              ) : ""}
+        {this.state.showInfo? (
+          <div>
+            <p>New train in approximately {this.props.estimate} seconds.</p>
+            <div className="info-box">
+              Demand for this station throughout the day, for both line directions.
             </div>
-          ) : ""}
+            <Line data={this.state.chartData} options={lineChartOptions} width="150" height="180"/>
+
+          </div>
+        ) : ""}
 
 
-
-        </div>
       </li>
     );
   }
@@ -133,20 +127,17 @@ export class TimeLine extends React.Component{
 
   public render(){
     return (
-      <section className="block-content t-block-teal l-block-spacing">
-        <div className="l-contained">
+      <div className="timeline-container">
 
-          <ul className="timeline-list">
+        <ul className="timeline-list">
 
-            {this.props.stationsPhysical.map((s, i) => (
-              <StationInfoComponent key={i} isLast={i === this.props.stationsPhysical.length-1} name={s.name} color={this.props.color} estimate={this.props.estimates[i][0]} demands={this.props.stations[i].demand}/>
-            ))}
+          {this.props.stationsPhysical.map((s, i) => (
+            <StationInfoComponent key={i} isLast={i === this.props.stationsPhysical.length-1} name={s.name} color={this.props.color} estimate={this.props.estimates[i][0]} demands={this.props.stations[i].demand}/>
+          ))}
 
-          </ul>
+        </ul>
 
-        </div>
-
-      </section>
+      </div>
     );
   }
 }

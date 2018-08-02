@@ -1,0 +1,15 @@
+.section-container{
+  border: 2px solid #222;
+  margin-bottom: 10px;
+}
+
+.section-header{
+  background-color: #222;
+  padding: 10px;
+  color: #fdfdfd;
+  background-image: url(black-pattern.png);
+}
+
+.section-body{
+  padding: 10px;
+}

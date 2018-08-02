@@ -1,6 +1,12 @@
 import { Train } from "./Train";
 
-export default class Monitor{
+export enum MonitorState{
+  OK,
+  DANGEROUS_SCHEDULING,
+  TRAIN_COLLISION
+}
+
+export class Monitor{
 
   private _trains: Train[];
   private _safeDistance: number = 200;

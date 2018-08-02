@@ -6,6 +6,7 @@
     "@types/big.js": "^4.0.5",
     "big.js": "^5.1.2",
     "chart.js": "1.1.1",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.10",
     "react": "^16.4.1",
     "react-chartjs": "^1.2.0",

@@ -23,3 +23,35 @@ body {
 a{
   cursor: pointer;
 }
+
+hr{
+  border: 0;
+  height: 1px;
+  margin: 15px 0;
+  background-image: linear-gradient(to right, rgba(180, 180, 180, 0), rgba(180, 180, 180, 0.75), rgba(180, 180, 180, 0));
+}
+
+.info-box {
+  padding: 10px;
+  background-color: #fff8c6;
+  font-size: 0.7em;
+  margin-bottom: 10px;
+}
+
+.margin-bottom{
+  margin-bottom: 10px;
+}
+
+
+.stylish-link{
+  color: black;
+  font-weight: bold;
+}
+
+.stylish-link:hover{
+  color: #88AACE;
+}
+
+.fa{
+  font-size: 2em;
+}

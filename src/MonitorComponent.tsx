@@ -1,18 +1,23 @@
 import * as React from 'react';
 import { Line } from "react-chartjs";
+import "./MonitorComponent.css";
 
 export interface MonitorComponentProps{
   danger: number;
   iteration: number;
 }
 
-const chartOptions = {
+const dangerChartOptions = {
   pointDotRadius: 0,
   scaleOverride: true,
-  scaleSteps: 10,
-  scaleStepWidth: 10,
+  scaleSteps: 1,
+  scaleStepWidth: 100,
   scaleStartValue: 0,
-  animation: false
+  animation: false,
+  scaleShowLabels: false,
+  tooltips: {
+    enabled: false
+  }
 };
 
 const maxItems = 10;
@@ -79,8 +84,19 @@ export class MonitorComponent extends React.Component{
 
     return (
       <div>
+
+        <div className="margin-bottom">Iteration: {this.state.iteration}</div>
+
+        <hr/>
+
+        <div className="info-box">
+          This is a danger detector. When two trains are too close to each other,
+          the peak will be high. When all trains are separate from each other, it'll be considered
+          as non-dangerous.
+        </div>
+
         {this.state.chartData !== null? (
-          <Line data={this.state.chartData} options={chartOptions} width="400" height="180"/>
+          <Line data={this.state.chartData} options={dangerChartOptions} width="180" height="90" className="monitor-chart"/>
         ) : ""}
       </div>
     );
