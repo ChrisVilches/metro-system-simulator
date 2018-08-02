@@ -31,11 +31,12 @@ block-content p {
   margin: 0 0 3em 0;
 }
 
+
 .content h3 {
+  padding-top: 8px;
   font-size: 1.2em;
   line-height: 1.2;
   letter-spacing: 0.02em;
-  color: #fff;
 }
 
 
@@ -68,54 +69,28 @@ p {
   position: relative;
   max-width: 700px;
 }
-.timeline-list:before {
-  content: "";
-  border-left: 5px solid #CCC;
-  left: -0.25em;
-  top: 2em;
-  height: 100%;
-  position: absolute;
-  bottom: 0;
-  top: 0;
-  transform-origin: 0 0;
-  animation: scaleVertical 3s 1s ease both 1;
-}
-.timeline-list:after {
-  content: "";
-  clear: both;
-  position: absolute;
-  bottom: 0px;
-  left: -1em;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: none repeat scroll 0% 0% #DDD;
-  border: 5px solid #DDD;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-  animation: revealScaleUp 0.75s 2.82s ease both 1;
-}
 
-.t-block-teal h2 {
-  color: #fff;
-}
-
-.t-block-teal h3 {
-  color: #034944;
-}
-
-.t-block-teal p {
-  color: #034944;
-}
 
 .timeline-list li {
   margin: 0 0 3em 0;
   padding: 0 2em 0em 2em;
   position: relative;
   list-style-type: none;
-
 }
 
-.timeline-list li:before {
+.timeline-line {
+  content: "";
+  border-left: 5px solid #CCC;
+  left: -2.7em;
+
+  height: 150%;
+  position: absolute;
+  bottom: 0;
+  top: 0em;
+  transform-origin: 0 0;
+}
+
+.timeline-circle {
   content: "";
   position: absolute;
   top: 0px;
@@ -123,7 +98,6 @@ p {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: none repeat scroll 0% 0% #02aa9d;
+  background: none repeat scroll 0% 0% #7a7a7a;
   border: 5px solid #fff;
-  animation: revealScaleUp 0.75s 0s ease both 1;
 }

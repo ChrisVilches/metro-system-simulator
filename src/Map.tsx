@@ -21,11 +21,11 @@ class MyMap extends React.Component{
     return (
       <GoogleMap onClick={this.onClick} {...this.props}>
 
+        {this.props.children}
+
         {this.props.trains.map((train, i) => (
           <Circle key={i} radius={70} options={{ fillColor: "#888888", center: train.pos }}/>
         ))}
-
-        {this.props.children}
 
       </GoogleMap>
     );

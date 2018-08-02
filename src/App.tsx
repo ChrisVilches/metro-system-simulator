@@ -13,12 +13,11 @@ import TimeRange from "./management/TimeRange";
 import { Util } from "./Util";
 import PolyLine from "./PolyLine";
 import { Train } from "./management/Train";
-import LineInfo from "./LineInfo";
 import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
 import { LineMapDisplay, LineMapDisplayProps } from "./LineMapDisplay";
 import Monitor from "./management/Monitor";
 import { MonitorComponent, MonitorComponentProps } from "./MonitorComponent";
-import TimeLine from "./TimeLine";
+import { TimeLine, TimeLineProps } from "./TimeLine";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -29,7 +28,7 @@ const points: LineFactoryPhysicalPoint[] = require("./sampledata/linea1_santiago
 points.map(p => { if(p.station) p.demands = [demand1, demand2] });
 points.map(p => { if(p.isTerminal) p.timeRange = new TimeRange(new Time(8, 0), new Time(23, 0)) });
 
-const polyLine = new PolyLine(points, "#FF0000");
+const polyLine = new PolyLine(points);
 
 const lineFactory = new LineFactory();
 const lineFromLineClass = lineFactory.fromPhysicalPoints(points);
@@ -38,27 +37,7 @@ const stationLocations = [];
 
 points.map(p => { if(p.station) stationLocations.push({ lat: p.lat, lng: p.lng, name: p.station }) });
 
-
-
-const EstimateTable = (props) => (
-  <table>
-    <thead>
-      <tr>
-        <th>Station</th>
-        <th>Arrivals (Seconds left)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {props.estimates.map((estimate, i) => (
-        <tr key={i}>
-          <td>{i}</td>
-          <td>{JSON.stringify(estimate)}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
-
+const color = "#bf0000";
 
 
 
@@ -81,10 +60,10 @@ class App extends React.Component {
 
     this.state = {
       lines: [
-        { name: "Linea 1", color: "#ff0000" },
-        { name: "Linea 2", color: "#ff00ff" }
+        { name: "Linea 1", color: color },
+        { name: "Linea 2", color: "#7f30ca" }
       ],
-      iterations: 0,
+      iteration: 0,
       trains: [],
       danger: 0,
       estimates: d.getEstimatedTimes()
@@ -112,7 +91,7 @@ class App extends React.Component {
         this.monitor.trains = d.trains;
         this.setState({
           trains,
-          iterations: this.state.iterations+1,
+          iteration: this.state.iteration+1,
           danger: this.monitor.computeDanger(),
           estimates: d.getEstimatedTimes()
         });
@@ -149,26 +128,20 @@ class App extends React.Component {
             defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
             defaultZoom={12.22}>
 
-            <LineMapDisplay color="#FF0000" stationLocations={stationLocations} polyLine={polyLine}/>
+            <LineMapDisplay color={color} stationLocations={stationLocations} polyLine={polyLine}/>
 
           </Map>
         </div>
 
-        <div>Iterations: {this.state.iterations}</div>
+        <div>Iteration: {this.state.iteration}</div>
 
-        <TimeLine stations={stationLocations} estimates={this.state.estimates}/>
+        <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
+
+        <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
 
         <DemandConfig/>
-        <MonitorComponent danger={this.state.danger}/>
-        <EstimateTable estimates={this.state.estimates}/>
 
-        <div>
-          {this.state.lines.map((line, i) => (
 
-            <LineInfo key={i} name={line.name} color={line.color}/>
-
-          ))}
-        </div>
       </div>
     );
   }

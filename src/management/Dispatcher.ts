@@ -238,7 +238,7 @@ export default class Dispatcher implements IUpdatable{
 
 
   private trainsPerMinute(demand:number){
-    return 0.9;
+    return 0.2;
     return 10 - (0.09 * demand);
   }
 

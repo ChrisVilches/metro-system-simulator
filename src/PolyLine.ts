@@ -7,7 +7,7 @@ export default class PolyLine{
   private _points: any[];
   private fullDistance: number;
 
-  constructor(points: any[], color?: string){
+  constructor(points: any[]){
     this._points = points.map(x => _.pick(x, ["lat", "lng"]));
     this.fullDistance = this.lineFullDistance();
   }
