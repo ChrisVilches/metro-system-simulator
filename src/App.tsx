@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './App.css';
+import './App.scss';
 import Dispatcher from "./management/Dispatcher";
 import DemandConfig from "./DemandConfig";
 import { Line } from "./management/Line";
@@ -18,7 +18,7 @@ import { Monitor } from "./management/Monitor";
 import { MonitorComponent } from "./MonitorComponent";
 import { TimeLine, TimeLineProps } from "./TimeLine";
 import { SectionComponent } from "./SectionComponent";
-import "font-awesome/css/font-awesome.min.css";
+
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
