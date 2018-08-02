@@ -1,15 +1,9 @@
 import * as _ from "lodash";
-import Train from "./Train";
+import { Train, TrainState } from "./Train";
 
-enum State {
-  MOVING,
-  STOPPED_AT_STATION,
-  ENTERING_TERMINAL
-}
-
-const MAX_SPEED_DEFAULT: number = 15;
-const ACCELERATION_DEFAULT: number = 1;
-const MAX_WAIT_TIME: number = 8;
+const MAX_SPEED_DEFAULT: number = 18;
+const ACCELERATION_DEFAULT: number = 2;
+const MAX_WAIT_TIME: number = 2;
 const WAIT_ENTER_TERMINAL: number = 5;
 
 
@@ -31,7 +25,6 @@ export class SimpleAccelerationTrain extends Train {
   private maxWaitTime:number;
   private currentWaitTimeStation:number;
   private waitEnterTerminal:number;
-  private state:State;
   private _doneFlag:boolean = false;
 
   constructor(stopPoints:number[], initPoint: number, options: SimpleAccelerationTrainOptions = {}){
@@ -57,7 +50,7 @@ export class SimpleAccelerationTrain extends Train {
 
     // PARECE que lo de saltarse la primera estacion se puede hacer colocando el estado altiro en MOVING
     // para recoger gente en la primera estacion hay que empezar en estado sin moverse
-    this.state = options.skipFirstTerminal === true? State.MOVING : State.STOPPED_AT_STATION;
+    this.state = options.skipFirstTerminal === true? TrainState.MOVING : TrainState.STOPPED_AT_STATION;
     this.currentWaitTimeStation = this.maxWaitTime;
   }
 
@@ -84,13 +77,15 @@ export class SimpleAccelerationTrain extends Train {
   }
 
 
-  private stateAccelerating(){
-    console.log("(currPos "+this._currentPos+", speed: "+this.speed+")")
+  protected stateMoving(){
+    //console.log("(currPos "+this._currentPos+", speed: "+this.speed+")")
 
     let accel = this.acceleration;
     accel *= this.shouldDeaccelerate()? -1 : 1;
 
-    if(this.shouldDeaccelerate()) console.log("BAJANDO VELOCIDAD")
+    if(this.shouldDeaccelerate()){
+      //console.log("BAJANDO VELOCIDAD");
+    }
 
     let nextSpeed = this.speed + accel;
     nextSpeed = Math.min(nextSpeed, this.maxSpeed);
@@ -109,11 +104,11 @@ export class SimpleAccelerationTrain extends Train {
       this.nextStopPoint++;
 
       if(this.nextStopPoint >= this.stopPoints.length){
-        this.state = State.ENTERING_TERMINAL;
+        this.state = TrainState.ENTERING_TERMINAL;
         this.currentWaitTimeStation = this.waitEnterTerminal;
       } else {
         this.currentWaitTimeStation = this.maxWaitTime;
-        this.state = State.STOPPED_AT_STATION;
+        this.state = TrainState.STOPPED_AT_STATION;
       }
 
     } else {
@@ -124,35 +119,35 @@ export class SimpleAccelerationTrain extends Train {
     this.signalStopPoint = this.stopPoints[this.nextStopPoint];
   }
 
-  private stateEnteringTerminal(){
+  protected stateEnteringTerminal(){
     this.speed = 0;
     this.currentWaitTimeStation--;
 
     if(this.currentWaitTimeStation === 0){
-      console.log(`Train exit`);
+      //console.log(`Train exit`);
       this._doneFlag = true;
     }
   }
 
-  private stateStoppedAtStation(){
+  protected stateStoppedAtStation(){
     this.currentWaitTimeStation--;
     this.speed = 0;
-    console.log("STopped, current pos: " + this._currentPos, "Wait time: ", this.currentWaitTimeStation)
+    //console.log("Stopped, current pos: " + this._currentPos, "Wait time: ", this.currentWaitTimeStation)
     if(this.currentWaitTimeStation === 0){
-      console.log(`train STARTS after being stopped`);
-      this.state = State.MOVING;
+      //console.log(`train STARTS after being stopped`);
+      this.state = TrainState.MOVING;
     }
   }
 
   public update(){
     switch(this.state){
-      case State.MOVING:
-      this.stateAccelerating();
+      case TrainState.MOVING:
+      this.stateMoving();
       break;
-      case State.STOPPED_AT_STATION:
+      case TrainState.STOPPED_AT_STATION:
       this.stateStoppedAtStation();
       break;
-      case State.ENTERING_TERMINAL:
+      case TrainState.ENTERING_TERMINAL:
       this.stateEnteringTerminal();
       break;
       default:

@@ -1,5 +1,6 @@
 import Station from "./Station";
-import Train from "./Train";
+import { Train } from "./Train";
+import TimeRange from "./TimeRange";
 import * as _ from "lodash";
 
 export interface LineSegment{
@@ -47,6 +48,8 @@ export class Line{
 
   public isDangerous(allTrains: Train[], maximumDistanceAllowed: number): number[]{
 
+    if(allTrains.length === 0 || allTrains.length === 1) return null;
+
     let tooClose: Function = (t1: number, t2: number) => Math.abs(t1 - t2) < maximumDistanceAllowed;
 
     for(let i=0; i<allTrains.length; i++){
@@ -60,8 +63,25 @@ export class Line{
     return null;
   }
 
-  public getEstimatedTimes(){
+  public getAverageSegmentDemand(from:number, to:number, direction:number, period:TimeRange): number{
 
+    let schedules = [];
+
+    for(let s=from; s<=to; s++){
+
+      let currentStation = this.stations[s];
+
+      let average = currentStation
+      .demand[direction]
+      .getAverage(period.firstTime, period.secondTime);
+      schedules.push(average);
+    }
+
+    let accum = 0;
+    let n = 0;
+    schedules.map(v => { n++; accum += v });
+
+    return accum/n;
   }
 
 

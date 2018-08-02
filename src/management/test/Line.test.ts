@@ -3,7 +3,7 @@ import Station from '../Station';
 import DemandQuarters from '../DemandQuarters';
 import TimeRange from '../TimeRange';
 import Time from '../Time';
-import Train from '../Train';
+import { Train } from '../Train';
 import { SimpleAccelerationTrain, SimpleAccelerationTrainOptions } from '../SimpleAccelerationTrain';
 
 const demand1 = new DemandQuarters([
@@ -11,11 +11,16 @@ const demand1 = new DemandQuarters([
   { hr: 9, quarters: [80, 85, 79, 80]  }
 ]);
 
+const demand2 = new DemandQuarters([
+  { hr: 8, quarters: [80, 10, 80, 100]  },
+  { hr: 9, quarters: [70, 20, 10, 30]  }
+]);
+
 const st1: Station = new Station([demand1, demand1], new TimeRange(new Time(8, 4), new Time(10, 3)));
 const st2: Station = new Station([demand1, demand1]);
 const st3: Station = new Station([demand1, demand1]);
 const st4: Station = new Station([demand1, demand1]);
-const st5: Station = new Station([demand1, demand1], new TimeRange(new Time(8, 4), new Time(10, 3)));
+const st5: Station = new Station([demand2, demand1], new TimeRange(new Time(8, 4), new Time(10, 3)));
 const st6: Station = new Station([demand1, demand1]);
 const st7: Station = new Station([demand1, demand1]);
 const st8: Station = new Station([demand1, demand1], new TimeRange(new Time(8, 4), new Time(10, 3)));
@@ -109,4 +114,16 @@ it('Detect when it is dangerous (#3)', () => {
   expect(line.isDangerous([t4, t1], 59)).toBe(null);
   expect(line.isDangerous([t4, t1], 60)).toBe(null);
   expect(line.isDangerous([t4, t1], 61)).toEqual([0, 1]);
+});
+
+
+it('Gets average demand correctly', () => {
+  let line: Line = new Line([st1, st5], [110, 100]);
+  let avg;
+  avg = line.getAverageSegmentDemand(0, 1, 0, new TimeRange(new Time(8, 0), new Time(8, 59)));
+  expect(avg).toBe(58.75);
+
+  avg = line.getAverageSegmentDemand(0, 1, 0, new TimeRange(new Time(8, 15), new Time(9, 30)));
+  expect(avg).toBeCloseTo(60.3333333333, 10);
+
 });

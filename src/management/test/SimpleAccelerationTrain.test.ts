@@ -1,4 +1,4 @@
-import Train from '../Train';
+import { Train } from '../Train';
 import { SimpleAccelerationTrain, SimpleAccelerationTrainOptions } from "../SimpleAccelerationTrain";
 
 it('Initial position set correctly', () => {

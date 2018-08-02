@@ -12,7 +12,7 @@ import Time from "./management/Time";
 import TimeRange from "./management/TimeRange";
 import { Util } from "./Util";
 import PolyLine from "./PolyLine";
-import Train from "./management/Train";
+import { Train } from "./management/Train";
 import LineInfo from "./LineInfo";
 import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
 import { LineMapDisplay, LineMapDisplayProps } from "./LineMapDisplay";
@@ -39,6 +39,28 @@ points.map(p => { if(p.station) stationLocations.push({ lat: p.lat, lng: p.lng, 
 
 
 
+const EstimateTable = (props) => (
+  <table>
+    <thead>
+      <tr>
+        <th>Station</th>
+        <th>Arrivals (Seconds left)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {props.estimates.map((estimate, i) => (
+        <tr key={i}>
+          <td>{i}</td>
+          <td>{JSON.stringify(estimate)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+
+
+
 class App extends React.Component {
 
   state: any;
@@ -52,8 +74,10 @@ class App extends React.Component {
         { name: "Linea 1", color: "#ff0000" },
         { name: "Linea 2", color: "#ff00ff" }
       ],
+      iterations: 0,
       trains: [],
-      danger: 0
+      danger: 0,
+      estimates: []
     };
 
     let d = new Dispatcher(0, lineFromLineClass, [
@@ -63,7 +87,7 @@ class App extends React.Component {
       new Time(23, 0)
     ]);
 
-    for(let i=0; i<500; i++){
+    for(let i=0; i<300; i++){
       d.update();
     }
 
@@ -84,7 +108,9 @@ class App extends React.Component {
         this.monitor.trains = d.trains;
         this.setState({
           trains,
-          danger: this.monitor.computeDanger()
+          iterations: this.state.iterations+1,
+          danger: this.monitor.computeDanger(),
+          estimates: d.getEstimatedTimes()
         });
       } catch(e){
         console.log(e);
@@ -92,7 +118,7 @@ class App extends React.Component {
       }
 
 
-    }, 1000);
+    }, 200);
 
     this.getCoordinates = this.getCoordinates.bind(this);
   }
@@ -124,8 +150,11 @@ class App extends React.Component {
           </Map>
         </div>
 
+        <div>Iterations: {this.state.iterations}</div>
+
         <DemandConfig/>
         <MonitorComponent danger={this.state.danger}/>
+        <EstimateTable estimates={this.state.estimates}/>
 
         <div>
           {this.state.lines.map((line, i) => (

@@ -1,4 +1,4 @@
-import Train from "./Train";
+import { Train } from "./Train";
 
 export default class Monitor{
 
@@ -10,7 +10,6 @@ export default class Monitor{
   }
 
   public computeDanger(): number{
-    console.log("Computing...")
     let maxDanger: number = 0;
     for(let i=0; i<this._trains.length-1; i++){
       let t1: Train = this._trains[i];
