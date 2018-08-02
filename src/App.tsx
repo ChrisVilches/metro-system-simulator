@@ -162,7 +162,10 @@ class App extends React.Component {
                   <option value="c">c</option>
                 </select>
               </SectionComponent>
-              <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
+              <SectionComponent title={<span><i className="fa fa-sm fa-train icon-section"/>Stations</span>}>
+                <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
+              </SectionComponent>
+
             </Col>
           </Row>
         </Container>
