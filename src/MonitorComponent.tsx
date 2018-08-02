@@ -12,7 +12,7 @@ const chartOptions = {
   scaleSteps: 10,
   scaleStepWidth: 10,
   scaleStartValue: 0,
-  animation: false,
+  animation: false
 };
 
 const maxItems = 10;
@@ -49,7 +49,6 @@ export class MonitorComponent extends React.Component{
     let labels = [];
 
     for(let i=0; i<maxItems; i++){
-      //labels.push(prevState.iteration-i);
       labels.push(" ");
     }
 
@@ -57,7 +56,7 @@ export class MonitorComponent extends React.Component{
       labels: labels,
       datasets: [
         {
-          fillColor: "rgba(220,220,220,0.2)",
+          fillColor: `rgba(180,180,180,0.2)`,
           strokeColor: "rgba(220,220,220,1)",
           pointColor: "rgba(220,220,220,1)",
           pointStrokeColor: "#fff",

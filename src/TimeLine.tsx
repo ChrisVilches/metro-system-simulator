@@ -37,7 +37,7 @@ class StationInfoComponent extends React.Component{
     super(props);
 
     this.state = {
-      showDemand: false
+      showInfo: false
     };
 
     let dataDirection0 = [];
@@ -72,12 +72,13 @@ class StationInfoComponent extends React.Component{
     	]
     };
 
-    this.onClickToggleDemand = this.onClickToggleDemand.bind(this);
+    this.onClickToggleInfo = this.onClickToggleInfo.bind(this);
   }
 
-  onClickToggleDemand(){
+
+  onClickToggleInfo(){
     this.setState({
-      showDemand: !this.state.showDemand
+      showInfo: !this.state.showInfo
     });
   }
 
@@ -91,20 +92,27 @@ class StationInfoComponent extends React.Component{
             </div>
           ) : ""}
 
-          <div className="timeline-circle" style={{ backgroundColor: this.props.color }}/>
+          <a onClick={this.onClickToggleInfo}>
+            <div className="timeline-circle" style={{ backgroundColor: this.props.color }}/>
+            <h4>{this.props.name}</h4>
+        </a>
 
-          <h3>{this.props.name}</h3>
+          {this.state.showInfo? (
+            <div>
+              <p>New train in approximately {this.props.estimate} seconds.</p>
 
-          <p>New train in approximately {this.props.estimate} seconds.</p>
-
-          <div>
-            <button className="btn-primary" onClick={this.onClickToggleDemand}>
-              {this.state.showDemand? "Hide demand" : "Show demand"}
-            </button>
-          </div>
-          {this.state.showDemand? (
-            <Line data={this.state.chartData} options={lineChartOptions} width="600" height="180"/>
+              <div>
+                <button className="btn-primary">
+                  Useless button
+                </button>
+              </div>
+              {this.state.showDemand? (
+                <Line data={this.state.chartData} options={lineChartOptions} width="600" height="180"/>
+              ) : ""}
+            </div>
           ) : ""}
+
+
 
         </div>
       </li>
