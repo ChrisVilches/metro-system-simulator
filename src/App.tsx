@@ -18,6 +18,7 @@ import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
 import { LineMapDisplay, LineMapDisplayProps } from "./LineMapDisplay";
 import Monitor from "./management/Monitor";
 import { MonitorComponent, MonitorComponentProps } from "./MonitorComponent";
+import TimeLine from "./TimeLine";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -69,6 +70,15 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.monitor = new Monitor();
+
+    let d = new Dispatcher(0, lineFromLineClass, [
+      new Time(8, 0),
+      new Time(12, 0),
+      new Time(17, 0),
+      new Time(23, 0)
+    ]);
+
+
     this.state = {
       lines: [
         { name: "Linea 1", color: "#ff0000" },
@@ -77,15 +87,9 @@ class App extends React.Component {
       iterations: 0,
       trains: [],
       danger: 0,
-      estimates: []
+      estimates: d.getEstimatedTimes()
     };
 
-    let d = new Dispatcher(0, lineFromLineClass, [
-      new Time(8, 0),
-      new Time(12, 0),
-      new Time(17, 0),
-      new Time(23, 0)
-    ]);
 
     for(let i=0; i<300; i++){
       d.update();
@@ -118,7 +122,7 @@ class App extends React.Component {
       }
 
 
-    }, 200);
+    }, 1000);
 
     this.getCoordinates = this.getCoordinates.bind(this);
   }
@@ -151,6 +155,8 @@ class App extends React.Component {
         </div>
 
         <div>Iterations: {this.state.iterations}</div>
+
+        <TimeLine stations={stationLocations} estimates={this.state.estimates}/>
 
         <DemandConfig/>
         <MonitorComponent danger={this.state.danger}/>

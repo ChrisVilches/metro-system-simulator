@@ -1,0 +1,129 @@
+.block-content {
+  min-height: 100vh;
+}
+
+block-content p {
+  font-size: 1.1em;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  margin: 0 auto 1em auto;
+}
+
+.block-content h2 {
+  text-align: center;
+  margin: 1em 0 0 0;
+  font-size: 2.5em;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+
+.subtitle {
+  font-family: "Merriweather", sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1em;
+  margin: 0.5em 0;
+}
+
+.heading-group {
+  margin: 0 0 3em 0;
+}
+
+.content h3 {
+  font-size: 1.2em;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+
+h1, h2, h3 {
+  font-family: "Merriweather", sans-serif;
+  font-weight: 900;
+}
+
+p {
+  font-family: "Merriweather", sans-serif;
+  line-height: 1.5;
+}
+
+.l-block-spacing {
+  min-height: 80vh;
+  padding: 2em 0 4em 0;
+}
+
+.l-contained {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+
+.timeline-list {
+  padding-bottom: 1em;
+  position: relative;
+  max-width: 700px;
+}
+.timeline-list:before {
+  content: "";
+  border-left: 5px solid #CCC;
+  left: -0.25em;
+  top: 2em;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  transform-origin: 0 0;
+  animation: scaleVertical 3s 1s ease both 1;
+}
+.timeline-list:after {
+  content: "";
+  clear: both;
+  position: absolute;
+  bottom: 0px;
+  left: -1em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: none repeat scroll 0% 0% #DDD;
+  border: 5px solid #DDD;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  animation: revealScaleUp 0.75s 2.82s ease both 1;
+}
+
+.t-block-teal h2 {
+  color: #fff;
+}
+
+.t-block-teal h3 {
+  color: #034944;
+}
+
+.t-block-teal p {
+  color: #034944;
+}
+
+.timeline-list li {
+  margin: 0 0 3em 0;
+  padding: 0 2em 0em 2em;
+  position: relative;
+  list-style-type: none;
+
+}
+
+.timeline-list li:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -3.8em;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: none repeat scroll 0% 0% #02aa9d;
+  border: 5px solid #fff;
+  animation: revealScaleUp 0.75s 0s ease both 1;
+}
