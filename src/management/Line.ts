@@ -45,17 +45,23 @@ export class Line{
   }
 
 
-  public isDangerous(allTrains: Train[], maximumDistanceAllowed: number){
+  public isDangerous(allTrains: Train[], maximumDistanceAllowed: number): number[]{
 
     let tooClose: Function = (t1: number, t2: number) => Math.abs(t1 - t2) < maximumDistanceAllowed;
 
     for(let i=0; i<allTrains.length; i++){
       for(let j=i+1; j<allTrains.length; j++){
-        if(tooClose(allTrains[i].currentPos, allTrains[j].currentPos)) return true;
+        if(tooClose(allTrains[i].currentPos, allTrains[j].currentPos)){
+          return [i, j];
+        }
       }
     }
 
-    return false;
+    return null;
+  }
+
+  public getEstimatedTimes(){
+
   }
 
 

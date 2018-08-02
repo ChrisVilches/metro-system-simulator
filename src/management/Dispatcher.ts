@@ -1,14 +1,11 @@
 import { Line, LineSegment } from "./Line";
 import Train from "./Train";
+import { SimpleAccelerationTrain, SimpleAccelerationTrainOptions } from "./SimpleAccelerationTrain";
 import IUpdatable from "./IUpdatable";
 import * as _ from "lodash";
 import Station from "./Station";
 import TimeRange from "./TimeRange";
 import Time from "./Time";
-
-// Train dispatcher
-
-// This algorithm could be different, modified, and implemented again in a completely different way
 
 
 interface DayPlanification{
@@ -18,6 +15,7 @@ interface DayPlanification{
   currentTrains: Train[];
   hasDispatchedTrainYet: boolean;
 }
+
 
 export default class Dispatcher implements IUpdatable{
 
@@ -30,7 +28,7 @@ export default class Dispatcher implements IUpdatable{
   constructor(direction:number, line:Line, schedules:Time[]){
     this.line = line;
     this.direction = direction;
-    this.dangerDistance = 200;
+    this.dangerDistance = 100;
 
     for(let s=0; s<schedules.length-1; s++){
       this.periods.push({
@@ -97,10 +95,10 @@ export default class Dispatcher implements IUpdatable{
           accumDistances.push(this.line.getDistance(0, +i));
         }
 
-        let newPossibleTrain = new Train(accumDistances, planification.lineSegment.firstTerminal);
+        let newPossibleTrain: Train = new SimpleAccelerationTrain(accumDistances, planification.lineSegment.firstTerminal);
         let phyiscalPosNewTrain: number = accumDistances[planification.lineSegment.firstTerminal];
         let noTrains = currTrains.length === 0;
-        let safeDistance = !this.checkDanger(this.dangerDistance, newPossibleTrain);
+        let safeDistance = this.checkDanger(this.dangerDistance, newPossibleTrain) === null;
 
         if(noTrains || safeDistance){
           planification.tick = 0;
@@ -113,15 +111,40 @@ export default class Dispatcher implements IUpdatable{
 
       }
 
-      currTrains.map(t => t.update());
+      currTrains.map(t => {
+        this.signalSafeDistance();
+        t.update();
+      });
 
     }
 
-    if(this.checkDanger(this.dangerDistance)) throw Error("MUY CERCA!!!!!!!!!!");
+    let trainsDanger: number[] = this.checkDanger(this.dangerDistance);
+
+    if(trainsDanger !== null)
+    console.log(`Muy cerca pero solo para la opinion de este dispatcher!!!!!!!!!! trenes indices ${trainsDanger[0]}, ${trainsDanger[1]}`);
 
   }
 
-  private checkDanger(maximumDistanceAllowed: number, extraTrain: Train = null){
+  private signalSafeDistance(){
+    let allTrains: Train[] = [];
+
+    this.lineSegmentDayPlanification.map(seg => {
+      allTrains = allTrains.concat(seg.currentTrains);
+    });
+
+    allTrains = _.sortBy(allTrains, (t: Train) => t.currentPos);
+
+    for(let i=0; i<allTrains.length-1; i++){
+      let t = allTrains[i];
+      let next = allTrains[i+1];
+
+      let safePos = next.currentPos - this.dangerDistance;
+      t.signalStop(safePos);
+    }
+  }
+
+
+  private checkDanger(maximumDistanceAllowed: number, extraTrain: Train = null): number[]{
 
     let allTrains: Train[] = [];
 
@@ -133,11 +156,14 @@ export default class Dispatcher implements IUpdatable{
       allTrains.push(extraTrain);
     }
 
+    allTrains = _.sortBy(allTrains, (t: Train) => t.currentPos);
+
     return this.line.isDangerous(allTrains, maximumDistanceAllowed);
   }
 
 
   private trainsPerMinute(demand:number){
+    return 1.2;
     return 10 - (0.09 * demand);
   }
 

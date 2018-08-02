@@ -12,9 +12,12 @@ import Time from "./management/Time";
 import TimeRange from "./management/TimeRange";
 import { Util } from "./Util";
 import PolyLine from "./PolyLine";
+import Train from "./management/Train";
 import LineInfo from "./LineInfo";
 import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
 import { LineMapDisplay, LineMapDisplayProps } from "./LineMapDisplay";
+import Monitor from "./management/Monitor";
+import { MonitorComponent, MonitorComponentProps } from "./MonitorComponent";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -35,18 +38,22 @@ const stationLocations = [];
 points.map(p => { if(p.station) stationLocations.push({ lat: p.lat, lng: p.lng, name: p.station }) });
 
 
+
 class App extends React.Component {
 
   state: any;
+  monitor: Monitor;
 
   constructor(props){
     super(props);
+    this.monitor = new Monitor();
     this.state = {
       lines: [
         { name: "Linea 1", color: "#ff0000" },
         { name: "Linea 2", color: "#ff00ff" }
       ],
-      trains: []
+      trains: [],
+      danger: 0
     };
 
     let d = new Dispatcher(0, lineFromLineClass, [
@@ -56,21 +63,34 @@ class App extends React.Component {
       new Time(23, 0)
     ]);
 
-    setInterval(() => {
+    for(let i=0; i<500; i++){
+      d.update();
+    }
+
+    let interval = setInterval(() => {
 
       let trains = [];
 
-      let allTrains = d.trains;
+      let allTrains: Train[] = d.trains;
       let fullLength = lineFromLineClass.fullLength;
 
       allTrains.map(t => trains.push({
         pos: polyLine.getPointWithinRoute(t.currentPos/fullLength)
       }));
 
-      d.update();
-      this.setState({
-        trains
-      });
+
+      try {
+        d.update();
+        this.monitor.trains = d.trains;
+        this.setState({
+          trains,
+          danger: this.monitor.computeDanger()
+        });
+      } catch(e){
+        console.log(e);
+        clearInterval(interval);
+      }
+
 
     }, 1000);
 
@@ -105,6 +125,7 @@ class App extends React.Component {
         </div>
 
         <DemandConfig/>
+        <MonitorComponent danger={this.state.danger}/>
 
         <div>
           {this.state.lines.map((line, i) => (

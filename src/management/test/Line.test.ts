@@ -4,6 +4,7 @@ import DemandQuarters from '../DemandQuarters';
 import TimeRange from '../TimeRange';
 import Time from '../Time';
 import Train from '../Train';
+import { SimpleAccelerationTrain, SimpleAccelerationTrainOptions } from '../SimpleAccelerationTrain';
 
 const demand1 = new DemandQuarters([
   { hr: 8, quarters: [10, 40, 70, 80]  },
@@ -62,31 +63,50 @@ it('Calculates line segments (between terminals) correctly (three segments, one 
 
 it('Detect when it is dangerous (#1)', () => {
   let line: Line = new Line([st1], []);
-  let t1 = new Train([10, 20], 0);
-  let t2 = new Train([15, 20], 1);
-  expect(line.isDangerous([t1, t2], 4)).toBe(false);
-  expect(line.isDangerous([t1, t2], 5)).toBe(false);
-  expect(line.isDangerous([t1, t2], 9)).toBe(false);
-  expect(line.isDangerous([t1, t2], 10)).toBe(false);
-  expect(line.isDangerous([t1, t2], 11)).toBe(true);
-  expect(line.isDangerous([t1, t2], 50)).toBe(true);
+  let t1: Train = new SimpleAccelerationTrain([10, 20], 0);
+  let t2: Train = new SimpleAccelerationTrain([15, 20], 1);
+  expect(line.isDangerous([t1, t2], 4)).toBe(null);
+  expect(line.isDangerous([t1, t2], 5)).toBe(null);
+  expect(line.isDangerous([t1, t2], 9)).toBe(null);
+  expect(line.isDangerous([t1, t2], 10)).toBe(null);
+  expect(line.isDangerous([t1, t2], 11)).toEqual([0, 1]);
+  expect(line.isDangerous([t1, t2], 50)).toEqual([0, 1]);
 });
 
 it('Detect when it is dangerous (#2)', () => {
   let line: Line = new Line([st1], []);
-  let t1 = new Train([10], 0);
-  let t2 = new Train([15], 0);
-  let t3 = new Train([50], 0);
-  let t4 = new Train([70], 0);
-  expect(line.isDangerous([t1, t2], 5)).toBe(false);
-  expect(line.isDangerous([t1, t2], 6)).toBe(true);
-  expect(line.isDangerous([t1, t3], 40)).toBe(false);
-  expect(line.isDangerous([t1, t2], 41)).toBe(true);
-  expect(line.isDangerous([t2, t3], 35)).toBe(false);
-  expect(line.isDangerous([t2, t3], 36)).toBe(true);
-  expect(line.isDangerous([t3, t2], 35)).toBe(false);
-  expect(line.isDangerous([t3, t2], 36)).toBe(true);
-  expect(line.isDangerous([t4, t1], 59)).toBe(false);
-  expect(line.isDangerous([t4, t1], 60)).toBe(false);
-  expect(line.isDangerous([t4, t1], 61)).toBe(true);
+  let t1: Train = new SimpleAccelerationTrain([10], 0);
+  let t2: Train = new SimpleAccelerationTrain([15], 0);
+  let t3: Train = new SimpleAccelerationTrain([50], 0);
+  let t4: Train = new SimpleAccelerationTrain([70], 0);
+  expect(line.isDangerous([t1, t2], 5)).toBe(null);
+  expect(line.isDangerous([t1, t2], 6)).toEqual([0, 1]);
+  expect(line.isDangerous([t1, t3], 40)).toBe(null);
+  expect(line.isDangerous([t1, t2], 41)).toEqual([0, 1]);
+  expect(line.isDangerous([t2, t3], 35)).toBe(null);
+  expect(line.isDangerous([t2, t3], 36)).toEqual([0, 1]);
+  expect(line.isDangerous([t3, t2], 35)).toBe(null);
+  expect(line.isDangerous([t3, t2], 36)).toEqual([0, 1]);
+  expect(line.isDangerous([t4, t1], 59)).toBe(null);
+  expect(line.isDangerous([t4, t1], 60)).toBe(null);
+  expect(line.isDangerous([t4, t1], 61)).toEqual([0, 1]);
+});
+
+it('Detect when it is dangerous (#3)', () => {
+  let line: Line = new Line([st1], []);
+  let t1: Train = new SimpleAccelerationTrain([10], 0);
+  let t2: Train = new SimpleAccelerationTrain([15], 0);
+  let t3: Train = new SimpleAccelerationTrain([50], 0);
+  let t4: Train = new SimpleAccelerationTrain([70], 0);
+  expect(line.isDangerous([t1, t2], 5)).toBe(null);
+  expect(line.isDangerous([t1, t2], 6)).toEqual([0, 1]);
+  expect(line.isDangerous([t1, t3], 40)).toBe(null);
+  expect(line.isDangerous([t1, t2], 41)).toEqual([0, 1]);
+  expect(line.isDangerous([t2, t3], 35)).toBe(null);
+  expect(line.isDangerous([t2, t3], 36)).toEqual([0, 1]);
+  expect(line.isDangerous([t3, t2], 35)).toBe(null);
+  expect(line.isDangerous([t3, t2], 36)).toEqual([0, 1]);
+  expect(line.isDangerous([t4, t1], 59)).toBe(null);
+  expect(line.isDangerous([t4, t1], 60)).toBe(null);
+  expect(line.isDangerous([t4, t1], 61)).toEqual([0, 1]);
 });
