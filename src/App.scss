@@ -8,35 +8,20 @@
   background-color: #222;
   height: 150px;
   padding: 20px;
+  padding-left: 0;
   color: white;
   margin-bottom: 20px;
   background-image: url(train-banner.jpg);
   background-position: right;
 }
 
-.footer {
-  /*position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;*/
-  text-align: center;
-  margin: 0 auto;
-}
-
-
 
 .App-title {
   font-size: 2.2em;
-  margin-top: 100px;
+  margin-top: 50px;
   font-family: SourceSansPro-Regular;
 }
 
 .App-intro {
   font-size: large;
-}
-
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }

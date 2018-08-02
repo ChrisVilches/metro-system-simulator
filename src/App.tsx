@@ -18,7 +18,7 @@ import { Monitor } from "./management/Monitor";
 import { MonitorComponent } from "./MonitorComponent";
 import { TimeLine, TimeLineProps } from "./TimeLine";
 import { SectionComponent } from "./SectionComponent";
-
+import { Row, Col, Container, Footer, Button } from "reactstrap";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -115,19 +115,21 @@ class App extends React.Component {
 
   public render() {
     return (
-      <div>
+      <div className="d-flex flex-column wrapper">
 
         <header className="App-header">
-          <h1 className="App-title">Metro System Simulator</h1>
+          <Container>
+            <Row>
+              <Col md={{ size: 6, offset: 3 }}><h1 className="App-title">Metro System Simulator</h1></Col>
+            </Row>
+          </Container>
+
         </header>
 
-        <div className="container">
 
-
-
-          <div className="row">
-
-            <div className="three columns">
+        <Container className="flex-fill">
+          <Row>
+            <Col md={3}>
               <SectionComponent title={<span><i className="fa fa-sm fa-area-chart icon-section"/>Monitor</span>}>
                 <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
               </SectionComponent>
@@ -138,11 +140,8 @@ class App extends React.Component {
                   mainly with the purpose of developing and testing different AI and scheduling algorithms.
                 </p>
               </SectionComponent>
-
-            </div>
-
-            <div className="six columns">
-
+            </Col>
+            <Col md={6}>
               <Map
                 trains={this.state.trains}
                 isMarkerShown={true}
@@ -154,12 +153,8 @@ class App extends React.Component {
                 <LineMapDisplay color={color} stationLocations={stationLocations} polyLine={polyLine}/>
 
               </Map>
-
-            </div>
-
-
-            <div className="three columns">
-
+            </Col>
+            <Col md={3}>
               <SectionComponent title={<span><i className="fa fa-sm fa-train icon-section"/>Select line</span>}>
                 <select>
                   <option value="a">a</option>
@@ -167,20 +162,17 @@ class App extends React.Component {
                   <option value="c">c</option>
                 </select>
               </SectionComponent>
-
               <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
-
-            </div>
-
-          </div>
-
-        </div>
+            </Col>
+          </Row>
+        </Container>
 
 
-        <div className="footer">
+
+        <footer className="container text-center">
 
           <hr/>
-          <div className="footer-content">
+          <div>
             <p>By Felo Vilches, 2018</p>
             <p>
               <a className="stylish-link" href="https://github.com/FeloVilches/i-like-trains" target="_blank">
@@ -188,7 +180,7 @@ class App extends React.Component {
               </a>
             </p>
           </div>
-        </div>
+        </footer>
       </div>
     );
   }

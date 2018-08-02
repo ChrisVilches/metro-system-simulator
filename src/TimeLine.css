@@ -1,37 +1,3 @@
-/*
-.subtitle {
-  font-family: "Merriweather", sans-serif;
-  font-weight: 300;
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 1em;
-  margin: 0.5em 0;
-}*/
-/*
-.heading-group {
-  margin: 0 0 3em 0;
-}*/
-/*
-.block-content {
-  min-height: 100vh;
-}*/
-
-/*
-h1, h2, h3 {
-  font-family: "Merriweather", sans-serif;
-  font-weight: 900;
-}
-
-p {
-  font-family: "Merriweather", sans-serif;
-  line-height: 1.5;
-}*/
-/*
-.l-block-spacing {
-  min-height: 80vh;
-  padding: 2em 0 4em 0;
-}*/
-
 .timeline-container {
   margin-left: auto;
   margin-right: auto;
@@ -43,13 +9,9 @@ p {
   background-color: white;
 }
 
-
 .timeline-list {
   padding-bottom: 0em;
   position: relative;
-}
-
-.timeline-list ul {
 }
 
 .timeline-list li {
@@ -63,7 +25,7 @@ p {
   content: "";
   border-left: 3px solid #CCC;
   left: -1.25em;
-  height: 95%;
+  height: 88%;
   position: absolute;
   bottom: 0;
   top: 0em;
@@ -74,7 +36,7 @@ p {
   content: "";
   position: absolute;
   top: -0.2em;
-  left: -1.95em;
+  left: -1.82em;
   width: 20px;
   height: 20px;
   border-radius: 50%;
