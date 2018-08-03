@@ -1,0 +1,37 @@
+@mixin unselectable-text{
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
+$small-icon-scale: 0.6;
+$info-box-color: #F3F8FF;
+$info-box-icon-color: #BED2F5;
+$icon-section-color: #F4FF71;
+$footer-text-color: #AAA;
+
+$main-link-color: #000;
+$main-link-hover-color: #88AACE;
+
+/* For media queries */
+$big-screen-width: 768px;
+$small-screen-width: 767px;
+
+
+@font-face {
+  font-family: blackfont;
+  src: url(../fonts/black.ttf);
+}
+
+@font-face {
+  font-family: SourceSansPro-Regular;
+  src: url(../fonts/SourceSansPro-Regular.ttf);
+}
+
+@font-face {
+  font-family: trench;
+  src: url(../fonts/trench100free.ttf), url(../fonts/trench100free.otf) format('otf');
+}

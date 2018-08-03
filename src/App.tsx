@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './App.scss';
+import './scss/App.scss';
 import Dispatcher from "./management/Dispatcher";
 import DemandConfig from "./DemandConfig";
 import { Line } from "./management/Line";
@@ -18,28 +18,71 @@ import { Monitor } from "./management/Monitor";
 import { MonitorComponent } from "./MonitorComponent";
 import { TimeLine, TimeLineProps } from "./TimeLine";
 import { SectionComponent } from "./SectionComponent";
-import { Row, Col, Container, Footer, Button } from "reactstrap";
+import { Row, Col, Container, Button, Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
+import { SelectMobilePC, SelectMobilePCProps } from "./SelectMobilePC";
+import { NavComponent, FooterComponent } from "./HeaderFooter";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
 const demand2:IDemand = new DemandQuarters(require("./sampledata/demand2.json"));
 
+class LineAllData {
 
-const points: LineFactoryPhysicalPoint[] = require("./sampledata/linea1_santiago.json");
-points.map(p => { if(p.station) p.demands = [demand1, demand2] });
-points.map(p => { if(p.isTerminal) p.timeRange = new TimeRange(new Time(8, 0), new Time(23, 0)) });
+  private _points: LineFactoryPhysicalPoint[];
+  private _polyLine: PolyLine;
+  private _stationLocations: any[];
+  private _color: string;
+  private _line: Line;
+  private _name: string;
 
-const polyLine = new PolyLine(points);
+  constructor(phyiscalPoints: LineFactoryPhysicalPoint[], name: string, color: string){
 
-const lineFactory = new LineFactory();
-const lineFromLineClass = lineFactory.fromPhysicalPoints(points);
+    this._color = color;
+    this._name = name;
 
-const stationLocations = [];
+    this._points = phyiscalPoints;
+    this._points.map(p => { if(p.station) p.demands = [demand1, demand2] });
+    this._points.map(p => { if(p.isTerminal) p.timeRange = new TimeRange(new Time(8, 0), new Time(23, 0)) });
 
-points.map(p => { if(p.station) stationLocations.push({ lat: p.lat, lng: p.lng, name: p.station }) });
+    let lineFactory: LineFactory = new LineFactory();
+    this._line = lineFactory.fromPhysicalPoints(this._points);
+    this._polyLine = new PolyLine(this._points);
 
-const color = "#bf0000";
+    this._stationLocations = [];
+    this._points.map(p => { if(p.station) this._stationLocations.push({ lat: p.lat, lng: p.lng, name: p.station }) });
 
+  }
+
+  public get name(){
+    return this._name;
+  }
+
+  public get polyLine(){
+    return this._polyLine;
+  }
+
+  public get color(){
+    return this._color;
+  }
+
+  public get stationLocations(){
+    return this._stationLocations;
+  }
+
+  public get line(){
+    return this._line;
+  }
+}
+
+
+
+const linesData: LineAllData[] = [
+  new LineAllData(require("./sampledata/linea1_santiago.json"), "Linea 1", "#BF0000"),
+  new LineAllData(require("./sampledata/linea2_santiago.json"), "Linea 2", "#FFA447"),
+  new LineAllData(require("./sampledata/linea4_santiago.json"), "Linea 4", "#1C1CFF"),
+  new LineAllData(require("./sampledata/linea5_santiago.json"), "Linea 5", "#7ED071"),
+  new LineAllData(require("./sampledata/linea6_santiago.json"), "Linea 6", "#BC60E1")
+];
 
 
 class App extends React.Component {
@@ -51,90 +94,120 @@ class App extends React.Component {
     super(props);
     this.monitor = new Monitor();
 
-    let d = new Dispatcher(0, lineFromLineClass, [
-      new Time(8, 0),
-      new Time(12, 0),
-      new Time(17, 0),
-      new Time(23, 0)
-    ]);
+    let dispatchers: Dispatcher[] = [];
 
+    for(let i in linesData){
+      dispatchers.push(
+        new Dispatcher(0, linesData[i].line, [
+          new Time(8, 0),
+          new Time(12, 0),
+          new Time(17, 0),
+          new Time(23, 0)
+        ])
+      );
+    }
 
     this.state = {
-      lines: [
-        { name: "Linea 1", color: color },
-        { name: "Linea 2", color: "#7f30ca" }
-      ],
       iteration: 0,
       trains: [],
       danger: 0,
-      estimates: d.getEstimatedTimes()
+      selectedLine: 2,
+      estimates: [],
+      totalTrains: 0
     };
 
 
-    for(let i=0; i<300; i++){
-      d.update();
+    for(let i=0; i<100; i++){
+      for(let j=0; j<dispatchers.length; j++){
+        dispatchers[j].update();
+      }
     }
 
     let interval = setInterval(() => {
 
-      let trains = [];
-
-      let allTrains: Train[] = d.trains;
-      let fullLength = lineFromLineClass.fullLength;
-
-      allTrains.map(t => trains.push({
-        pos: polyLine.getPointWithinRoute(t.currentPos/fullLength)
-      }));
-
-
       try {
-        d.update();
-        this.monitor.trains = d.trains;
+
+        let trainsPhysical = [];
+        let danger: number = 0;
+        let totalTrains: number = 0;
+
+        for(let i=0; i<dispatchers.length; i++){
+
+          let d: Dispatcher = dispatchers[i];
+          let trains: Train[] = d.trains;
+          totalTrains += trains.length;
+          let fullLength: number = linesData[i].line.fullLength;
+
+          danger = Math.max(danger, this.monitor.computeDanger(d.trains));
+
+          trains.map(t => trainsPhysical.push({
+            pos: linesData[i].polyLine.getPointWithinRoute(t.currentPos/fullLength)
+          }));
+          d.update();
+        }
+
         this.setState({
-          trains,
+          trains: trainsPhysical,
           iteration: this.state.iteration+1,
-          danger: this.monitor.computeDanger(),
-          estimates: d.getEstimatedTimes()
+          danger,
+          totalTrains,
+          estimates: dispatchers[this.state.selectedLine].getEstimatedTimes()
         });
+
       } catch(e){
         console.log(e);
         clearInterval(interval);
       }
 
-
     }, 1000);
 
-    this.getCoordinates = this.getCoordinates.bind(this);
+
   }
 
-  getCoordinates(lat, lng){
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
+  getCoordinates = (lat, lng) => {
 
     console.log(lat, lng)
 
   }
 
+
+  onChangeSelectedLine = (result) => {
+    console.log(result)
+    this.setState({
+      selectedLine: result.index
+    });
+  }
+
+
   public render() {
+
+    let lineOptions = [];
+    linesData.map(l => lineOptions.push({
+      label: l.name,
+      color: l.color
+    }));
+
+
     return (
       <div className="d-flex flex-column wrapper">
 
-        <header className="App-header">
-          <Container>
-            <Row>
-              <Col md={{ size: 6, offset: 3 }}><h1 className="App-title">Metro System Simulator</h1></Col>
-            </Row>
-          </Container>
-
-        </header>
+        <NavComponent/>
 
 
         <Container className="flex-fill">
           <Row>
             <Col md={3}>
-              <SectionComponent title={<span><i className="fa fa-sm fa-area-chart icon-section"/>Monitor</span>}>
-                <MonitorComponent danger={this.state.danger} iteration={this.state.iteration}/>
+              <SectionComponent faIcon="area-chart" title="Monitor">
+                <MonitorComponent danger={this.state.danger} iteration={this.state.iteration} totalTrains={this.state.totalTrains}/>
               </SectionComponent>
 
-              <SectionComponent title={<span><i className="fa fa-sm fa-info icon-section"/>About</span>}>
+              <SectionComponent faIcon="info" title="About">
                 <p>
                   This is a train system simulator. It was created
                   mainly with the purpose of developing and testing different AI and scheduling algorithms.
@@ -150,20 +223,33 @@ class App extends React.Component {
                 defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
                 defaultZoom={12.22}>
 
-                <LineMapDisplay color={color} stationLocations={stationLocations} polyLine={polyLine}/>
+                {linesData.map((l, i) => (
+                  <LineMapDisplay
+                    key={i}
+                    color={l.color}
+                    showStationMarkers={this.state.selectedLine === i}
+                    stationLocations={l.stationLocations}
+                    polyLine={l.polyLine}/>
+                ))}
+
+
 
               </Map>
             </Col>
             <Col md={3}>
-              <SectionComponent title={<span><i className="fa fa-sm fa-train icon-section"/>Select line</span>}>
-                <select>
-                  <option value="a">a</option>
-                  <option value="b">b</option>
-                  <option value="c">c</option>
-                </select>
+              <SectionComponent faIcon="train" title="Select line">
+                <SelectMobilePC onResult={this.onChangeSelectedLine} options={lineOptions} defaultSelectedIndex={this.state.selectedLine}/>
               </SectionComponent>
-              <SectionComponent title={<span><i className="fa fa-sm fa-train icon-section"/>Stations</span>}>
-                <TimeLine stationsPhysical={stationLocations} color={color} estimates={this.state.estimates} stations={lineFromLineClass.stations}/>
+
+
+              <SectionComponent faIcon="map" title="Stations">
+                <div className="timeline-section">
+                  <TimeLine
+                    stationsPhysical={linesData[this.state.selectedLine].stationLocations}
+                    color={linesData[this.state.selectedLine].color}
+                    estimates={this.state.estimates}
+                    stations={linesData[this.state.selectedLine].line.stations}/>
+                </div>
               </SectionComponent>
 
             </Col>
@@ -171,19 +257,8 @@ class App extends React.Component {
         </Container>
 
 
+        <FooterComponent/>
 
-        <footer className="container text-center">
-
-          <hr/>
-          <div>
-            <p>By Felo Vilches, 2018</p>
-            <p>
-              <a className="stylish-link" href="https://github.com/FeloVilches/i-like-trains" target="_blank">
-                <i className="fa fa-github"/>
-              </a>
-            </p>
-          </div>
-        </footer>
       </div>
     );
   }

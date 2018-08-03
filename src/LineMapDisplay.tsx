@@ -7,16 +7,20 @@ export interface LineMapDisplayProps {
  color: string;
  polyLine: PolyLine;
  stationLocations: any[];
+ showStationMarkers: boolean;
 }
 
 export const LineMapDisplay: React.SFC<LineMapDisplayProps> = (props) => {
   return (
     <div>
-    {props.stationLocations.map((point, j) => (
-      <Marker key={j} position={point} title={point.name}/>
-    ))}
+      {props.showStationMarkers? (
+        props.stationLocations.map((point, j) => (
+          <Marker key={j} position={point} title={point.name}/>
+        ))
+      ) : null}
 
-    <Polyline options={{ strokeColor: props.color, path: props.polyLine.points }}/>
+
+    <Polyline options={{ strokeColor: props.color, strokeWeight: 5, path: props.polyLine.points }}/>
 
   </div>
   );

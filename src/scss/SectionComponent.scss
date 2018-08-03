@@ -1,3 +1,11 @@
+@import "variables.scss";
+
+.icon-section{
+  padding-right: 10px;
+  margin-bottom: 2px;
+  color: $icon-section-color;
+}
+
 .section-container{
   border: 2px solid #222;
   margin-bottom: 10px;
@@ -8,7 +16,7 @@
   background-color: #222;
   padding: 10px;
   color: #fdfdfd;
-  background-image: url(black-pattern.png);
+  background-image: url(../images/black-pattern.png);
 }
 
 .section-body{

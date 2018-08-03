@@ -1,0 +1,42 @@
+@import "variables.scss";
+
+.header-title {
+  display: inline-block;
+  margin-left: 20px;
+  font-family: trench;
+  @include unselectable-text;
+}
+
+.align-items-center {
+  -ms-flex-align: center!important;
+  align-items: center!important;
+}
+
+.footer{
+  color: $footer-text-color;
+}
+
+
+/* Big */
+@media screen and (min-width: $big-screen-width) {
+  .header-title {
+    font-size: 2em;
+    /*margin-top: 15px;*/
+  }
+  .logo-metro{
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Small */
+@media screen and (max-width: $small-screen-width) {
+  .header-title {
+    font-size: 5vw;
+    /*margin-top: 8px;*/
+  }
+  .logo-metro{
+    width: 80px;
+    height: 80px;
+  }
+}

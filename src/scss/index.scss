@@ -1,12 +1,4 @@
-$small-icon-scale: 0.6;
-/*
-* {
- box-sizing: border-box;
-}
-*:before,
-*:after {
- box-sizing: border-box;
-}*/
+@import "variables.scss";
 
 html{
   height: 100%;
@@ -20,7 +12,7 @@ body {
   height: 100%;
   min-height: 100%;
   font-family: sans-serif;
-  background-image: url(tokyo.png);
+  background-image: url(../images/tokyo.png);
   background-position: bottom;
   background-attachment: fixed;
   background-repeat: repeat-x;
@@ -31,49 +23,11 @@ body, .wrapper {
 
 }
 
-
-
-
-/*
-.main-container {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.content-container {
-  flex: 1;
-}
-
-
-.footer {
-  background-color: transparent!important;
-}
-
-*/
-@font-face {
-  font-family: blackfont;
-  src: url('fonts/black.ttf');
-}
-
-@font-face {
-  font-family: SourceSansPro-Regular;
-  src: url('fonts/SourceSansPro-Regular.ttf');
-}
-
-
-
-.icon-section{
-  padding-right: 10px;
-  margin-bottom: 2px;
-  color: #FFFC34;
-}
-
 .fa-sm{
-    -webkit-transform: scale($small-icon-scale,$small-icon-scale);
-    -ms-transform: scale($small-icon-scale,$small-icon-scale);
-    transform: scale($small-icon-scale,$small-icon-scale);
-    vertical-align: middle;
+  -webkit-transform: scale($small-icon-scale,$small-icon-scale);
+  -ms-transform: scale($small-icon-scale,$small-icon-scale);
+  transform: scale($small-icon-scale,$small-icon-scale);
+  vertical-align: middle;
 }
 
 .btn-primary {
@@ -90,6 +44,7 @@ body, .wrapper {
 
 .btn-primary:hover {
   background-color: #fafafa;
+  @include unselectable-text;
 }
 
 a{
@@ -105,7 +60,7 @@ hr{
 
 .info-box {
   padding: 10px;
-  background-color: #F3F8FF;
+  background-color: $info-box-color;
   font-size: 0.7em;
   margin-bottom: 10px;
   position: relative;
@@ -118,7 +73,7 @@ hr{
   top: 0;
   left: 10px;
   font-size: 2.5em;
-  color: #BED2F5;
+  color: $info-box-icon-color;
   content: "\f05a";
 }
 
@@ -128,12 +83,12 @@ hr{
 
 
 .stylish-link{
-  color: black;
+  color: $main-link-color;
   font-weight: bold;
 }
 
 .stylish-link:hover{
-  color: #88AACE;
+  color: $main-link-hover-color;
 }
 
 .fa{

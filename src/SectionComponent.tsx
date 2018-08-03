@@ -1,27 +1,22 @@
 import * as React from 'react';
-import "./SectionComponent.css";
+import "./scss/SectionComponent.scss";
 
 export interface SectionComponentProps{
   title: string;
   children: any;
+  faIcon?: string;
 }
 
-export class SectionComponent extends React.Component{
-
-  props: any;
-
-  constructor(props){
-    super(props);
-  }
-
-  public render(){
-    return (
-      <div className="section-container">
-        <div className="section-header">{this.props.title}</div>
-        <div className="section-body">
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-}
+export const SectionComponent = (props: SectionComponentProps) => (
+  <div className="section-container">
+    <div className="section-header">
+      {props.faIcon? (
+        <i className={`fa fa-sm fa-${props.faIcon} icon-section`}/>
+      ) : null}
+      {props.title}
+    </div>
+    <div className="section-body">
+      {props.children}
+    </div>
+  </div>
+);

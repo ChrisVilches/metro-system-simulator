@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Line } from "react-chartjs";
-import "./MonitorComponent.css";
+import { Container, Row, Col } from "reactstrap";
+import "./scss/MonitorComponent.scss";
 
 export interface MonitorComponentProps{
   danger: number;
   iteration: number;
+  totalTrains: number;
 }
 
 const dangerChartOptions = {
@@ -34,7 +36,6 @@ export class MonitorComponent extends React.Component{
     for(let i=0; i<maxItems; i++) dangerValues.push(0);
 
     this.state = {
-      iteration: 0,
       chartData: null,
       dangerValues: dangerValues
     };
@@ -74,6 +75,7 @@ export class MonitorComponent extends React.Component{
 
     return {
       iteration: nextProps.iteration,
+      totalTrains: nextProps.totalTrains,
       dangerValues: newArray,
       chartData
     };
@@ -85,7 +87,16 @@ export class MonitorComponent extends React.Component{
     return (
       <div>
 
-        <div className="margin-bottom">Iteration: {this.state.iteration}</div>
+        <Container>
+          <Row>
+            <Col xs={8}>Iterations</Col>
+            <Col xs={4}>{this.state.iteration}</Col>
+          </Row>
+          <Row>
+            <Col xs={8}>Trains</Col>
+            <Col xs={4}>{this.state.totalTrains}</Col>
+          </Row>
+        </Container>
 
         <hr/>
 

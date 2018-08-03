@@ -26,7 +26,6 @@ export default class Dispatcher implements IUpdatable{
   private periods: TimeRange[] = [];
   private stationsPointMapping: number[] = [];
 
-
   constructor(direction:number, line:Line, schedules:Time[]){
     this.line = line;
     this.direction = direction;

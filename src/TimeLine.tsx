@@ -1,9 +1,10 @@
 import * as React from 'react';
-import "./TimeLine.css";
+import "./scss/TimeLine.scss";
 import { Line } from "react-chartjs";
 import Station from "./management/Station";
 import IDemand from "./management/IDemand";
 import Time from "./management/Time";
+import * as _ from "lodash";
 
 export interface TimeLineProps{
   stations: Station[];
@@ -84,22 +85,25 @@ class StationInfoComponent extends React.Component{
   }
 
   render(){
+
+    const props = this.props;
+
     return (
       <li>
-        {!this.props.isLast? (
+        {!props.isLast? (
           <div>
-            <div className="timeline-line" style={{ borderColor: this.props.color }}/>
+            <div className="timeline-line" style={{ borderColor: props.color }}/>
           </div>
         ) : ""}
 
         <a className="stylish-link" onClick={this.onClickToggleInfo}>
-          <div className="timeline-circle" style={{ backgroundColor: this.props.color }}/>
-          {this.props.name}
+          <div className="timeline-circle" style={{ backgroundColor: props.color }}/>
+          {props.name}
         </a>
 
         {this.state.showInfo? (
           <div>
-            <p>New train in approximately {this.props.estimate} seconds.</p>
+            <p>New train in approximately {props.estimate? props.estimate : "Unknown"} seconds.</p>
             <div className="info-box">
               Demand for this station throughout the day, for both line directions.
             </div>
@@ -132,7 +136,15 @@ export class TimeLine extends React.Component{
         <ul className="timeline-list">
 
           {this.props.stationsPhysical.map((s, i) => (
-            <StationInfoComponent key={i} isLast={i === this.props.stationsPhysical.length-1} name={s.name} color={this.props.color} estimate={this.props.estimates[i][0]} demands={this.props.stations[i].demand}/>
+            <StationInfoComponent
+              key={i}
+              isLast={i === this.props.stationsPhysical.length-1}
+              name={s.name}
+              color={this.props.color}
+              estimate={
+                this.props.estimates[i]? this.props.estimates[i][0] : null
+              }
+              demands={this.props.stations[i].demand}/>
           ))}
 
         </ul>
