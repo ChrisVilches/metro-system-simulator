@@ -1,6 +1,19 @@
 @import "variables.scss";
 
-.timeline-section{
-  height: 490px;
-  overflow-y: scroll;
+
+/* Big */
+@media screen and (min-width: $big-screen-width) {
+  .timeline-section{
+    padding-right: 1em;
+    height: 490px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* Small */
+@media screen and (max-width: $small-screen-width) {
+  .timeline-section{
+    padding-right: 0;
+  }
 }

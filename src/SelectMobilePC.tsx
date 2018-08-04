@@ -93,7 +93,7 @@ export class SelectMobilePC extends React.Component<SelectMobilePCProps, any>{
   renderPC: any = (props: SelectMobilePCProps) => {
     return (
       <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-        <DropdownToggle className="lines-dropdown" caret={true} style={{backgroundColor: props.options[this.state.selectedOption].color}}>
+        <DropdownToggle caret={true} className="lines-dropdown-toggler" style={{backgroundColor: props.options[this.state.selectedOption].color}}>
           {props.options[this.state.selectedOption].label}
         </DropdownToggle>
         <DropdownMenu

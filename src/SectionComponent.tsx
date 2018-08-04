@@ -8,7 +8,7 @@ export interface SectionComponentProps{
 }
 
 export const SectionComponent = (props: SectionComponentProps) => (
-  <div className="section-container">
+  <div className="section-container mb-2">
     <div className="section-header">
       {props.faIcon? (
         <i className={`fa fa-sm fa-${props.faIcon} icon-section`}/>

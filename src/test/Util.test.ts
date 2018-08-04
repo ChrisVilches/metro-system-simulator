@@ -1,4 +1,4 @@
-import { Util } from "./Util";
+import { Util } from "../Util";
 
 it('Computes distance between points correctly', () => {
   expect(Util.getDistance({ lat: 0, lng: 0}, { lat: 0, lng: 1})).toBe(1);

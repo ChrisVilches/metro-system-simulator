@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Line } from "react-chartjs";
 import { Container, Row, Col } from "reactstrap";
 import "./scss/MonitorComponent.scss";
+import { Line, ChartComponentProps, LinearComponentProps } from 'react-chartjs-2';
 
 export interface MonitorComponentProps{
   danger: number;
@@ -9,7 +9,11 @@ export interface MonitorComponentProps{
   totalTrains: number;
 }
 
+
 const dangerChartOptions = {
+  legend: {
+    display: false
+  },
   pointDotRadius: 0,
   scaleOverride: true,
   scaleSteps: 1,
@@ -17,8 +21,19 @@ const dangerChartOptions = {
   scaleStartValue: 0,
   animation: false,
   scaleShowLabels: false,
+  responsive: true,
   tooltips: {
     enabled: false
+  },
+  scales: {
+    yAxes: [{
+      display: false,
+      ticks: {
+        beginAtZero:true,
+        steps: 10,
+        max: 100
+      }
+    }]
   }
 };
 
@@ -41,6 +56,46 @@ export class MonitorComponent extends React.Component{
     };
   }
 
+
+  static getColor(danger: number){
+    let red = [232, 44, 44];
+    let orange = [246, 193, 79];
+    let green = [101, 214, 122];
+    let blue = [141, 192, 234];
+
+    let between = (x, y) => x <= danger && danger <= y;
+
+    let c1, c2, p;
+
+    if(between(0, 33)){
+      c1 = blue;
+      c2 = green;
+      p = danger;
+    }
+    else if(between(33, 66)){
+      c1 = green;
+      c2 = orange;
+      p = danger - 33;
+    }
+    else{
+      c1 = orange;
+      c2 = red;
+      p = danger - 66;
+    }
+
+    let dy = [c2[0]-c1[0], c2[1]-c1[1], c2[2]-c1[2]];
+    let dx = 33;
+    let slope = [dy[0]/dx, dy[1]/dx, dy[2]/dx];
+
+    let r = c1[0] + (slope[0] * p);
+    let g = c1[1] + (slope[1] * p);
+    let b = c1[2] + (slope[2] * p);
+
+    return { r, g, b};
+
+  }
+
+
   static getDerivedStateFromProps(nextProps, prevState){
     if(nextProps.iteration === prevState.iteration){
       return {};
@@ -58,16 +113,15 @@ export class MonitorComponent extends React.Component{
       labels.push(" ");
     }
 
+    let color = MonitorComponent.getColor(nextProps.danger * 100);
+
     let chartData = {
       labels: labels,
       datasets: [
         {
-          fillColor: `rgba(180,180,180,0.2)`,
-          strokeColor: "rgba(220,220,220,1)",
-          pointColor: "rgba(220,220,220,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(220,220,220,1)",
+          pointRadius: 0,
+          backgroundColor: `rgba(${color.r},${color.g},${color.b},0.3)`,
+          borderColor: `rgba(${color.r},${color.g},${color.b},0.3)`,
           data: newArray
         }
       ]
@@ -107,7 +161,7 @@ export class MonitorComponent extends React.Component{
         </div>
 
         {this.state.chartData !== null? (
-          <Line data={this.state.chartData} options={dangerChartOptions} width="180" height="90" className="monitor-chart"/>
+          <Line data={this.state.chartData} options={dangerChartOptions}/>
         ) : ""}
       </div>
     );

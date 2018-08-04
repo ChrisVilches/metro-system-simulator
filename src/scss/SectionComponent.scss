@@ -7,18 +7,18 @@
 }
 
 .section-container{
-  border: 2px solid #222;
-  margin-bottom: 10px;
   background-color: white;
 }
 
 .section-header{
-  background-color: #222;
   padding: 10px;
   color: #fdfdfd;
   background-image: url(../images/black-pattern.png);
 }
 
 .section-body{
+  border-left: 1px solid $section-border-color;
+  border-bottom: 1px solid $section-border-color;
+  border-right: 1px solid $section-border-color;
   padding: 10px;
 }

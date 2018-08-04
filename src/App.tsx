@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './scss/App.scss';
 import Dispatcher from "./management/Dispatcher";
-import DemandConfig from "./DemandConfig";
 import { Line } from "./management/Line";
 import Map from "./Map";
 import IDemand from "./management/IDemand";
@@ -14,13 +13,14 @@ import PolyLine from "./PolyLine";
 import { Train } from "./management/Train";
 import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
 import { LineMapDisplay } from "./LineMapDisplay";
-import { Monitor } from "./management/Monitor";
+import { PerformanceCalculator } from "./management/PerformanceCalculator";
 import { MonitorComponent } from "./MonitorComponent";
 import { TimeLine, TimeLineProps } from "./TimeLine";
 import { SectionComponent } from "./SectionComponent";
 import { Row, Col, Container, Button, Navbar, NavbarBrand, NavItem, Input } from "reactstrap";
 import { SelectMobilePC, SelectMobilePCProps } from "./SelectMobilePC";
 import { NavComponent, FooterComponent } from "./HeaderFooter";
+import AboutCarousel from "./AboutCarousel";
 
 const demand1:IDemand = new DemandQuarters(require("./sampledata/demand1.json"));
 
@@ -77,28 +77,30 @@ class LineAllData {
 
 
 const linesData: LineAllData[] = [
-  new LineAllData(require("./sampledata/linea1_santiago.json"), "Linea 1", "#BF0000"),
+  new LineAllData(require("./sampledata/linea1_santiago.json"), "Linea 1", "#D16060"),
   new LineAllData(require("./sampledata/linea2_santiago.json"), "Linea 2", "#FFA447"),
-  new LineAllData(require("./sampledata/linea4_santiago.json"), "Linea 4", "#1C1CFF"),
-  new LineAllData(require("./sampledata/linea5_santiago.json"), "Linea 5", "#7ED071"),
-  new LineAllData(require("./sampledata/linea6_santiago.json"), "Linea 6", "#BC60E1")
+  new LineAllData(require("./sampledata/linea4_santiago.json"), "Linea 4", "#5F76C9"),
+  new LineAllData(require("./sampledata/linea5_santiago.json"), "Linea 5", "#90E088"),
+  new LineAllData(require("./sampledata/linea6_santiago.json"), "Linea 6", "#CA82D0")
 ];
 
 
 class App extends React.Component {
 
   state: any;
-  monitor: Monitor;
+  monitor: PerformanceCalculator;
+  dispatchers: Dispatcher[] = [];
+  interval: NodeJS.Timer;
 
   constructor(props){
     super(props);
-    this.monitor = new Monitor();
+    this.monitor = new PerformanceCalculator();
 
-    let dispatchers: Dispatcher[] = [];
+    let now: Date = new Date();
 
     for(let i in linesData){
-      dispatchers.push(
-        new Dispatcher(0, linesData[i].line, [
+      this.dispatchers.push(
+        new Dispatcher(now, 0, linesData[i].line, [
           new Time(8, 0),
           new Time(12, 0),
           new Time(17, 0),
@@ -118,57 +120,63 @@ class App extends React.Component {
 
 
     for(let i=0; i<100; i++){
-      for(let j=0; j<dispatchers.length; j++){
-        dispatchers[j].update();
+      for(let j=0; j<this.dispatchers.length; j++){
+        this.dispatchers[j].update();
       }
     }
 
-    let interval = setInterval(() => {
-
-      try {
-
-        let trainsPhysical = [];
-        let danger: number = 0;
-        let totalTrains: number = 0;
-
-        for(let i=0; i<dispatchers.length; i++){
-
-          let d: Dispatcher = dispatchers[i];
-          let trains: Train[] = d.trains;
-          totalTrains += trains.length;
-          let fullLength: number = linesData[i].line.fullLength;
-
-          danger = Math.max(danger, this.monitor.computeDanger(d.trains));
-
-          trains.map(t => trainsPhysical.push({
-            pos: linesData[i].polyLine.getPointWithinRoute(t.currentPos/fullLength)
-          }));
-          d.update();
-        }
-
-        this.setState({
-          trains: trainsPhysical,
-          iteration: this.state.iteration+1,
-          danger,
-          totalTrains,
-          estimates: dispatchers[this.state.selectedLine].getEstimatedTimes()
-        });
-
-      } catch(e){
-        console.log(e);
-        clearInterval(interval);
-      }
-
-    }, 1000);
-
 
   }
 
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
+  componentDidMount(){
+    this.interval = setInterval(this.updateState, 1000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.interval);
+  }
+
+
+  updateState = () => {
+
+    let trainsPhysical = [];
+    let danger: number = 0;
+    let totalTrains: number = 0;
+    let dispatchers = this.dispatchers;
+
+    for(let i=0; i<dispatchers.length; i++){
+
+      let d: Dispatcher = dispatchers[i];
+      let trains: Train[] = d.trains;
+      totalTrains += trains.length;
+      let fullLength: number = linesData[i].line.fullLength;
+
+      danger = Math.max(danger, this.monitor.computeDanger(d.trains));
+
+      trains.map(t => trainsPhysical.push({
+        pos: linesData[i].polyLine.getPointWithinRoute(t.currentPos/fullLength)
+      }));
+      d.update();
+    }
+
+
+
+    this.setState(function(state:any, props){
+
+      let newState = {
+        trains: trainsPhysical,
+        iteration: state.iteration+1,
+        danger,
+        totalTrains,
+        estimates: dispatchers[state.selectedLine].getEstimatedTimes()
+      };
+
+      return newState;
     });
+
   }
+
+
 
   getCoordinates = (lat, lng) => {
 
@@ -183,6 +191,7 @@ class App extends React.Component {
       selectedLine: result.index
     });
   }
+
 
 
   public render() {
@@ -200,41 +209,46 @@ class App extends React.Component {
         <NavComponent/>
 
 
-        <Container className="flex-fill">
+        <Container className="flex-fill mb-4">
           <Row>
             <Col md={3}>
+
+              <div className="mb-2">
+                <AboutCarousel/>
+              </div>
+
               <SectionComponent faIcon="area-chart" title="Monitor">
                 <MonitorComponent danger={this.state.danger} iteration={this.state.iteration} totalTrains={this.state.totalTrains}/>
               </SectionComponent>
 
-              <SectionComponent faIcon="info" title="About">
-                <p>
-                  This is a train system simulator. It was created
-                  mainly with the purpose of developing and testing different AI and scheduling algorithms.
-                </p>
-              </SectionComponent>
             </Col>
-            <Col md={6} className="mb-2">
-              <Map
-                trains={this.state.trains}
-                isMarkerShown={true}
-                defaultClickableIcons={false}
-                onGetClickCoordinates={this.getCoordinates}
-                defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
-                defaultZoom={12.22}>
 
-                {linesData.map((l, i) => (
-                  <LineMapDisplay
-                    key={i}
-                    color={l.color}
-                    showStationMarkers={this.state.selectedLine === i}
-                    stationLocations={l.stationLocations}
-                    polyLine={l.polyLine}/>
-                ))}
+            <Col md={6}>
 
+              <div className="mb-2">
+                <Map
+                  trains={this.state.trains}
+                  isMarkerShown={true}
+                  defaultClickableIcons={false}
+                  onGetClickCoordinates={this.getCoordinates}
+                  defaultCenter={{ lat: -33.4592763, lng: -70.6981906 }}
+                  defaultZoom={12.22}>
 
+                  {linesData.map((l, i) => (
+                    <LineMapDisplay
+                      key={i}
+                      color={l.color}
+                      showStationMarkers={this.state.selectedLine === i}
+                      stationLocations={l.stationLocations}
+                      polyLine={l.polyLine}/>
+                  ))}
+                </Map>
+              </div>
 
-              </Map>
+              <SectionComponent faIcon="bar-chart" title={`Performance`}>
+                <MonitorComponent danger={this.state.danger} iteration={this.state.iteration} totalTrains={this.state.totalTrains}/>
+              </SectionComponent>
+
             </Col>
             <Col md={3}>
               <SectionComponent faIcon="train" title="Select line">

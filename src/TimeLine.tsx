@@ -1,6 +1,6 @@
 import * as React from 'react';
 import "./scss/TimeLine.scss";
-import { Line } from "react-chartjs";
+import { Line } from "react-chartjs-2";
 import Station from "./management/Station";
 import IDemand from "./management/IDemand";
 import Time from "./management/Time";
@@ -28,6 +28,20 @@ const lineChartOptions = {
   scaleStepWidth: 25,
   scaleStartValue: 0,
   scaleShowLabels: false,
+  responsive: true,
+  legend: {
+    display: false
+  },
+  scales: {
+    yAxes: [{
+      display: false,
+      ticks: {
+        beginAtZero:true,
+        steps: 10,
+        max: 100
+      }
+    }]
+  }
 };
 
 class StationInfoComponent extends React.Component{
@@ -50,35 +64,34 @@ class StationInfoComponent extends React.Component{
       dataDirection1.push(this.props.demands[1].getDemand(new Time(i, 0)));
     }
 
+    let color0 = "rgba(234,92,92,0.5)";
+    let color1 = "rgba(92,150,234,0.5)";
+
     this.state.chartData = {
-    	labels: [0, "", "", "", 4, "", "", "", 8, "", "", "", 12, "", "", "", 16, "", "", "", 20, "", "", ""],
+    	labels: [0, "", "", "", "", "", 6, "", "", "", "", "", 12, "", "", "", "", 17, "", "", "", "", "", "", 24],
       datasets: [
     		{
-    			fillColor: "rgba(220,220,220,0.2)",
-    			strokeColor: "rgba(220,220,220,1)",
-    			pointColor: "rgba(220,220,220,1)",
-    			pointStrokeColor: "#fff",
-    			pointHighlightFill: "#fff",
-    			pointHighlightStroke: "rgba(220,220,220,1)",
+          label: "Direction A",
+    			backgroundColor: color0,
+          borderColor: color0,
+          pointRadius: 0,
     			data: dataDirection0
     		},
     		{
-    			fillColor: "rgba(151,187,205,0.2)",
-    			strokeColor: "rgba(151,187,205,1)",
-    			pointColor: "rgba(151,187,205,1)",
-    			pointStrokeColor: "#fff",
-    			pointHighlightFill: "#fff",
-    			pointHighlightStroke: "rgba(151,187,205,1)",
-    			data: dataDirection1
+          label: "Direction B",
+    			backgroundColor: color1,
+          borderColor: color1,
+          pointRadius: 0,
+    			data: dataDirection1,
+          borderWidth: 0
     		}
     	]
     };
 
-    this.onClickToggleInfo = this.onClickToggleInfo.bind(this);
   }
 
 
-  onClickToggleInfo(){
+  onClickToggleInfo = () => {
     this.setState({
       showInfo: !this.state.showInfo
     });
@@ -100,11 +113,18 @@ class StationInfoComponent extends React.Component{
 
         {this.state.showInfo? (
           <div className="timeline-content">
-            <p>New train in approximately {props.estimate? props.estimate : "Unknown"} seconds.</p>
+
+            {props.estimate? (
+              <p>New train in approximately {props.estimate} seconds.</p>
+            ) : (
+              <p>Predicting next train...</p>
+            )}
+
+
             <div className="info-box">
               Demand for this station throughout the day, for both line directions.
             </div>
-            <Line data={this.state.chartData} options={lineChartOptions} width="150" height="180"/>
+            <Line data={this.state.chartData} options={lineChartOptions}/>
 
           </div>
         ) : ""}

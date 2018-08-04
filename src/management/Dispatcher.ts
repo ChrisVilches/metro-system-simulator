@@ -25,8 +25,16 @@ export default class Dispatcher implements IUpdatable{
   private direction: number;
   private periods: TimeRange[] = [];
   private stationsPointMapping: number[] = [];
+  private _initTime: Date;
+  private _currentTime: Date;
 
-  constructor(direction:number, line:Line, schedules:Time[]){
+  constructor(initTime: Date, direction:number, line:Line, schedules:Time[]){
+
+    this._initTime = new Date(initTime);
+    this._currentTime = new Date(initTime);
+
+    console.log(`Dispatcher starts at ${this._initTime}`);
+
     this.line = line;
     this.direction = direction;
     this.dangerDistance = 200;
@@ -72,8 +80,8 @@ export default class Dispatcher implements IUpdatable{
 
   public update(){
 
-    // NOTESE que esto es solo para un terminal
-    // Hay que pasar el arreglo de trenes a cada segmento, no dejarlo como un puro arreglo de trenes
+    // Time + 1
+    this._currentTime.setSeconds(this._currentTime.getSeconds()+1);
 
     for(let dp=0; dp<this.lineSegmentDayPlanification.length; dp++){
 
@@ -104,16 +112,6 @@ export default class Dispatcher implements IUpdatable{
 
         let allTrains = this.trains;
 
-        /*for(let i=0; i<allTrains.length-1; i++){
-
-          if(allTrains[i].currentPos < allTrains[i+1].currentPos){
-
-          } else {
-            //console.log(allTrains)
-            //debugger;
-          }
-
-        }*/
 
         for(let t=0; t<allTrains.length; t++){
           if(allTrains[t].currentPos >= newPossibleTrain.currentPos){
@@ -130,51 +128,6 @@ export default class Dispatcher implements IUpdatable{
             break;
           }
         }
-
-      /*  if(nextTrain !== null) console.assert(nextTrain.currentPos >= newPossibleTrain.currentPos);
-        if(previousTrain !== null) console.assert(previousTrain.currentPos <= newPossibleTrain.currentPos);
-*/
-
-
-        //if(previousTrain !== null && nextTrain !== null){
-
-          /*console.log(previousTrain_index)
-          console.log(nextTrain_index)
-          console.log(previousTrain)
-          console.log(newPossibleTrain)
-          console.log(nextTrain)*/
-
-          //console.assert(previousTrain_index === nextTrain_index - 1 || previousTrain_index === nextTrain_index);
-          /*let asserted = false;
-          for(let i=0; i<allTrains.length-1; i++){
-            if(i === previousTrain_index){
-              console.assert(i+1 === nextTrain_index);
-              asserted = true;
-              break;
-            }
-          }
-          if(!asserted) console.log("NO HUBO UNA ASERCION!!!!!!!!")
-          console.assert(asserted);*/
-        //}
-
-        /*for(let i=0; i<this.trains.length-1; i++){
-
-          if(this.trains[i].currentPos < this.trains[i+1].currentPos){
-
-          } else {
-            let st=-1;
-            for(let j=0; j<this.stationsPointMapping.length; j++){
-              if(this.stationsPointMapping[j] === this.trains[i].currentPos){
-                st=j;
-                break;
-              }
-            }
-            console.log(`(Station ${st}) Error lol ${this.trains[i].currentPos} ${this.trains[i+1].currentPos}`)
-            //alert(this.trains[i].currentState)
-            //alert(this.trains[i+1].currentState)
-          }
-
-        }*/
 
         let adjacentTrains: Train[] = [];
 
@@ -209,6 +162,14 @@ export default class Dispatcher implements IUpdatable{
     }*/
 
 
+  }
+
+  public get currentTime(){
+    return this._currentTime;
+  }
+
+  public get initTime(){
+    return this._initTime;
   }
 
   private signalSafeDistance(){

@@ -7,11 +7,14 @@
 }
 
 
+$light-grey: #AAA;
+
 $small-icon-scale: 0.6;
 $info-box-color: #F3F8FF;
 $info-box-icon-color: #BED2F5;
-$icon-section-color: #F4FF71;
-$footer-text-color: #AAA;
+$icon-section-color: #F8F51A;
+$footer-text-color: $light-grey;
+$section-border-color: $light-grey;
 
 $main-link-color: #000;
 $main-link-hover-color: #88AACE;

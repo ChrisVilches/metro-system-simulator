@@ -6,7 +6,7 @@ export enum MonitorState{
   TRAIN_COLLISION
 }
 
-export class Monitor{
+export class PerformanceCalculator{
 
   private _safeDistance: number = 200;
 

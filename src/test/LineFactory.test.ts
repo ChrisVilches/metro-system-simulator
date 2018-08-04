@@ -1,9 +1,9 @@
-import { LineFactory, LineFactoryPhysicalPoint } from "./LineFactory";
-import IDemand from "./management/IDemand";
-import DemandQuarters from "./management/DemandQuarters";
-import TimeRange from "./management/TimeRange";
-import Time from "./management/Time";
-import { Line } from "./management/Line";
+import { LineFactory, LineFactoryPhysicalPoint } from "../LineFactory";
+import IDemand from "../management/IDemand";
+import DemandQuarters from "../management/DemandQuarters";
+import TimeRange from "../management/TimeRange";
+import Time from "../management/Time";
+import { Line } from "../management/Line";
 
 const dmnd: DemandQuarters = new DemandQuarters([
   { hr: 8, quarters: [0, 2, 4, 6] },

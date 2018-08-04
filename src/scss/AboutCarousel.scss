@@ -1,0 +1,38 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+@import "./variables.scss";
+
+$carousel-height: 250px;
+$carousel-text-color: white;
+
+.about-carousel{
+  height: $carousel-height;
+}
+
+.carousel-item{
+  height: $carousel-height;
+  text-align: center;
+  color: $carousel-text-color;
+  padding: 1.5em;
+  font-size: 0.8em;
+  width: 100%;
+}
+
+@mixin slide-background-image($url){
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url($url);
+}
+
+.about-carousel-item-1{
+  @include slide-background-image("../images/train.jpg");
+}
+
+.about-carousel-item-2{
+  @include slide-background-image("../images/future-train.jpg");
+  width: 100%;
+}
+
+.about-carousel-item-3{
+  @include slide-background-image("../images/kabuki.jpg");
+}

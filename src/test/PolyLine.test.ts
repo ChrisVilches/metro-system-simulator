@@ -1,4 +1,4 @@
-import PolyLine from "./PolyLine";
+import PolyLine from "../PolyLine";
 
 it('Gets point inside line correctly (one segment)', () => {
 
