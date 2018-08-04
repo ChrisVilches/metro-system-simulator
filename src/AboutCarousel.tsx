@@ -37,7 +37,7 @@ export default class AboutCarousel extends React.Component {
           It was made using React, Typescript, Bootstrap, and many other tools.
         </Slide>
         <Slide className="about-carousel-item-3">
-          Add more info... ad ad adas asd asd asdas d
+          Created by Felo Vilches.
         </Slide>
       </Carousel>
     );
