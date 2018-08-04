@@ -89,20 +89,17 @@ class StationInfoComponent extends React.Component{
     const props = this.props;
 
     return (
-      <li>
-        {!props.isLast? (
-          <div>
-            <div className="timeline-line" style={{ borderColor: props.color }}/>
-          </div>
-        ) : ""}
+      <li style={!props.isLast? { borderLeftColor: props.color } : {}}>
 
         <a className="stylish-link" onClick={this.onClickToggleInfo}>
           <div className="timeline-circle" style={{ backgroundColor: props.color }}/>
-          {props.name}
+          <div className="timeline-title">
+            {props.name}
+          </div>
         </a>
 
         {this.state.showInfo? (
-          <div>
+          <div className="timeline-content">
             <p>New train in approximately {props.estimate? props.estimate : "Unknown"} seconds.</p>
             <div className="info-box">
               Demand for this station throughout the day, for both line directions.

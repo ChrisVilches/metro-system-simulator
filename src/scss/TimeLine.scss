@@ -1,33 +1,57 @@
 @import "variables.scss";
 
+$timeline-circle-size: 0.8em;
+$timeline-content-extra-padding-left: 0.3em;
+$title-font-size: 1em;
+$line-item-vertical-size: 0.5em;
+
+$line-width: 0.15em;
+
+/* Don't modify */
+$timeline-content-padding-left: ($timeline-circle-size/2)+$timeline-content-extra-padding-left;
 
 .timeline-container {
   margin-left: auto;
   margin-right: auto;
-  padding-left: 3.2em;
-  padding-right: 1em;
-  padding-top: 5px;
+  padding: 0;
+  padding-left: ($timeline-circle-size/2);
+  padding-top: ($timeline-circle-size/2);
 }
 
 .timeline-list {
   padding-bottom: 0em;
   padding-left: 0;
   position: relative;
-  background-color: red;
 }
 
 .timeline-list li {
-  margin: 0 0 1px -1.4em;
-  padding: 0 1em 3em 0px;
-  position: relative;
+  margin: 0 0 0 0;
+  padding: 0 0 $line-item-vertical-size 0;
   list-style-type: none;
+  border-left: $line-width solid #CCC;
+}
 
+.timeline-list li:last-child{
+  border-left:$line-width solid transparent;
+}
+
+.timeline-title{
+  top: -($timeline-circle-size) - ($timeline-circle-size/2);
+  padding-left: $timeline-content-padding-left;
+  position: relative;
+  line-height: $title-font-size;
+  height: $title-font-size;
+  font-size: $title-font-size;
+}
+
+.timeline-content{
+  padding-left: $timeline-content-padding-left;
 }
 
 .timeline-line {
   content: "";
-  border-left: 3px solid #CCC;
-  left: -1.25em;
+  border-left: $line-width solid #CCC;
+  left: -$line-width/2;
   height: 100%;
   position: absolute;
   bottom: 0;
@@ -37,12 +61,12 @@
 
 .timeline-circle {
   content: "";
-  position: absolute;
-  top: -0.2em;
-  left: -1.82em;
-  width: 20px;
-  height: 20px;
+  position: relative;
+  top: -($timeline-circle-size/2);
+  left: -($timeline-circle-size/2) - ($line-width/2);
+  width: $timeline-circle-size;
+  height: $timeline-circle-size;
   border-radius: 50%;
   background: none repeat scroll 0% 0% #7a7a7a;
-  border: 2px solid #fff;
+
 }
