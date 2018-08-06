@@ -1,5 +1,5 @@
 import Station from '../Station';
-import DemandQuarters from '../DemandQuarters';
+import { DemandQuarters } from '../DemandQuarters';
 import TimeRange from '../TimeRange';
 import Time from '../Time';
 

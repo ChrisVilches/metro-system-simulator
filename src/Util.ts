@@ -20,6 +20,14 @@ export module Util {
     return +sum.sqrt();
   }
 
+  export function truncate(n:number, decimals:number):number{
+
+    n = n * Math.pow(10, decimals);
+    n = Math.round(n);
+    return n/Math.pow(10, decimals);
+
+  }
+
   /*function rad(x) {
     return x * Math.PI / 180;
   };

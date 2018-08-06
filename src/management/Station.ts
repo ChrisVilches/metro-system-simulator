@@ -36,7 +36,7 @@ export default class Station{
 
     else {
       this._isTerminal = false;
-    }
+    }    
 
   }
 

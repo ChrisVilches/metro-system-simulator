@@ -1,6 +1,6 @@
-import { LineFactory, LineFactoryPhysicalPoint } from "../LineFactory";
+import { LinePhysical, LineFactoryPhysicalPoint, LineFactory } from "../LinePhysical";
 import IDemand from "../management/IDemand";
-import DemandQuarters from "../management/DemandQuarters";
+import { DemandQuarters, DemandQuartersArgument } from '../management/DemandQuarters';
 import TimeRange from "../management/TimeRange";
 import Time from "../management/Time";
 import { Line } from "../management/Line";

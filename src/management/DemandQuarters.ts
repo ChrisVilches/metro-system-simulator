@@ -2,12 +2,27 @@ import * as _ from "lodash";
 import IDemand from "./IDemand";
 import Time from "./Time";
 
-export default class DemandQuarters implements IDemand{
 
-  private _quarters: any;
+export interface DemandQuartersArgument{
+  hr: number;
+  quarters: number[];
+}
 
-  constructor(times:any[]){
+export class DemandQuarters implements IDemand{
+
+  private _quarters: DemandQuartersArgument[];
+
+  constructor(times: DemandQuartersArgument[]){
     this._quarters = _.cloneDeep(times);
+    for(let i=0; i<this._quarters.length; i++){
+
+      for(let j=0; j<4; j++){
+        let random = (Math.random()*5) + 3;
+        this._quarters[i].quarters[j] += Math.round(random);
+        if(this._quarters[i].quarters[j] > 100) this._quarters[i].quarters[j] = 100;
+        if(this._quarters[i].quarters[j] < 0) this._quarters[i].quarters[j] = 0;
+      }
+    }
   }
 
   public getDemand(time: Time){

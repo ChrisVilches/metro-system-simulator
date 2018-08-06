@@ -1,4 +1,4 @@
-import DemandQuarters from '../DemandQuarters';
+import { DemandQuarters, DemandQuartersArgument } from '../DemandQuarters';
 import Time from '../Time';
 
 const demand: DemandQuarters = new DemandQuarters([

@@ -21,6 +21,8 @@ class MyMap extends React.Component{
     return (
       <GoogleMap onClick={this.onClick} {...this.props}>
 
+        <Polyline options={{ strokeColor: "#000000", strokeWeight: 6, path: this.props.debugPoints }}/>
+
         {this.props.children}
 
         {this.props.trains.map((train, i) => (
@@ -34,7 +36,7 @@ class MyMap extends React.Component{
 
 export default compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyD5PGtbPYazRn4cBzGmuaLSdxvRCAIq9Xc&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyD8Y-34Xxr1PSoNkTcaDWBnZLJWKVLEgqs&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,

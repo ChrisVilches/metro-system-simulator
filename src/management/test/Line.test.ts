@@ -1,6 +1,6 @@
 import { Line, LineSegment } from '../Line';
 import Station from '../Station';
-import DemandQuarters from '../DemandQuarters';
+import { DemandQuarters, DemandQuartersArgument } from '../DemandQuarters';
 import TimeRange from '../TimeRange';
 import Time from '../Time';
 import { Train } from '../Train';
