@@ -84,7 +84,7 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    //this.interval = setInterval(this.updateState, 1000);
+    this.interval = setInterval(this.updateState, 1000);
 
 
     let pts = this.pointsAccum;
